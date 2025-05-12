@@ -42,7 +42,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "school"
+rootProject.name = "content-engine"
 include("formation")
 include("teacher")
 //include("school-gradle-plugin")
