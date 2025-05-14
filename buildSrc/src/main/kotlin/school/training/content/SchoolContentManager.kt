@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.apache.poi.xwpf.usermodel.XWPFDocument
-import school.workspace.WorkspaceUtils
+import workspace.WorkspaceUtils
 import java.io.File
 import java.io.FileInputStream
 

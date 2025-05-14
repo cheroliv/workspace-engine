@@ -10,7 +10,7 @@ import school.PersonSchemaGenerator.Companion.generateYamlSchema
 import school.PersonSchemaGenerator.Person
 import school.PluginTests.Companion.testConfiguration
 import school.PluginTests.Workspace
-import school.workspace.WorkspaceUtils.yamlMapper
+import workspace.WorkspaceUtils.yamlMapper
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 

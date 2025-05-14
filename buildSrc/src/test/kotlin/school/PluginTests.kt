@@ -31,13 +31,14 @@ import school.PluginTests.Workspace.WorkspaceEntry.PortfolioEntry.Portfolio
 import school.PluginTests.Workspace.WorkspaceEntry.PortfolioEntry.Portfolio.PortfolioProject
 import school.PluginTests.Workspace.WorkspaceEntry.PortfolioEntry.Portfolio.PortfolioProject.ProjectBuild
 import school.training.content.*
-import school.forms.FormPlugin
+import forms.FormPlugin
 import school.frontend.SchoolPlugin
 import school.frontend.SchoolPlugin.Companion.TASK_HELLO
-import school.jbake.JBakeGhPagesPlugin
+import jbake.JBakeGhPagesPlugin
 import school.training.content.SchoolContentManager.spgJsonMapper
 import school.training.content.SchoolContentManager.toJson
 import school.training.content.SchoolContentManager.toYaml
+import workspace.OfficeEntry
 import java.io.File
 import java.lang.System.out
 import kotlin.test.Test
@@ -277,7 +278,7 @@ class PluginTests {
 
     @Test
     fun checkInitWorkspace(): Unit = initWorkspace
-        .run(school.workspace.Office::isEmpty)
+        .run(workspace.Office::isEmpty)
         .run(::assertTrue)
 
     /**
@@ -292,11 +293,11 @@ class PluginTests {
      */
     @Test
     fun checkAddEntryToWorkspace(): Unit {
-        fun school.workspace.Office.addEntry(entry: school.workspace.OfficeEntry) {
+        fun workspace.Office.addEntry(entry: OfficeEntry) {
 //        put(entry.first.last(),entry.second)
         }
 
-        val ws: school.workspace.Office = initWorkspace
+        val ws: workspace.Office = initWorkspace
         ws.addEntry(
             listOf(
                 "workspace",
