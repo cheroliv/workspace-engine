@@ -1,14 +1,10 @@
-import forms.FormPlugin
-import jbake.JBakeGhPagesPlugin
-import translate.TranslatorPlugin
-
 plugins { idea }
 
 apply<school.frontend.SchoolPlugin>()
-apply<FormPlugin>()
-apply<JBakeGhPagesPlugin>()
+apply<forms.FormPlugin>()
+apply<jbake.JBakeGhPagesPlugin>()
 apply<ai.AssistantPlugin>()
-apply<TranslatorPlugin>()
+apply<translate.TranslatorPlugin>()
 
 object School {
     const val GROUP_KEY = "artifact.group"
