@@ -252,7 +252,7 @@ class PluginTests {
     fun `test when loading with workspaceWrapper ext fun of the project if yaml config is provided`(): Unit =
         assertDoesNotThrow {
             assertEquals(
-                "${System.getProperty("user.home")}/workspace/bibliotheque/slides",
+                "${System.getProperty("user.home")}/workspace/office/slides",
                 projectInstance.testConfiguration.workspace.office.slides.path
             )
         }

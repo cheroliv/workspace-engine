@@ -50,7 +50,7 @@ object WorkspaceManager {
 
     @JvmStatic
     fun Project.gradleProperties(key: String = "artifact.version"): String =
-        "/workspace/school/gradle.properties"
+        "/workspace/workspace-engine/gradle.properties"
             .run { "${System.getProperty("user.home")}$this" }
             .let(::File)
             .run {
