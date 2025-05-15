@@ -1,9 +1,7 @@
 import org.asciidoctor.gradle.jvm.slides.AsciidoctorJRevealJSTask
-import school.courses.CoursesPlugin
 import jbake.JBakeGhPagesManager.createCnameFile
 import jbake.JBakeGhPagesManager.sitePushDestPath
 import jbake.JBakeGhPagesManager.sitePushPathTo
-import slides.SlidesPlugin
 import slides.SlidesPlugin.RevealJsSlides.BUILD_GRADLE_KEY
 import slides.SlidesPlugin.RevealJsSlides.CODERAY_CSS_KEY
 import slides.SlidesPlugin.RevealJsSlides.DOCINFO_KEY
@@ -35,8 +33,8 @@ plugins {
     id("org.asciidoctor.jvm.revealjs")
 }
 
-apply<SlidesPlugin>()
-apply<CoursesPlugin>()
+apply<slides.SlidesPlugin>()
+apply<school.courses.CoursesPlugin>()
 
 repositories { ruby { gems() } }
 

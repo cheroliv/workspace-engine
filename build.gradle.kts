@@ -22,10 +22,12 @@ allprojects {
 }
 
 tasks.run {
+
     wrapper {
         gradleVersion = "8.6"
         distributionType = Wrapper.DistributionType.BIN
     }
+
     withType<JavaExec> {
         jvmArgs = listOf(
             "--add-modules=jdk.incubator.vector",
@@ -33,14 +35,17 @@ tasks.run {
             "--enable-preview"
         )
     }
+
     register<Exec>("reportTestApi") {
         group = "api"
         commandLine("./gradlew", "-q", "-s", "-p", "../api", ":reportTests")
     }
+
     register<Exec>("testApi") {
         group = "api"
         commandLine("./gradlew", "-q", "-s", "-p", "../api", ":check", "--rerun-tasks")
     }
+
     register<Exec>("runInstaller") {
         group = "installer"
         commandLine(
@@ -48,6 +53,7 @@ tasks.run {
             "../api/installer/build/libs/installer-${project.properties["artifact.version"]}.jar"
         )
     }
+
     register<Exec>("runApi") {
         group = "api"
         commandLine(
@@ -55,6 +61,7 @@ tasks.run {
             "../api/build/libs/api-${project.properties["artifact.version"]}.jar"
         )
     }
+
     register<Exec>("runLocalApi") {
         group = "api"
         commandLine(

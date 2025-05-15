@@ -3,3 +3,6 @@
 build
 conversations
 person.xsd
+*.iml
+*.ipr
+*.iws
