@@ -29,7 +29,7 @@ object Constants {
 
 dependencies {
     setOf(
-        files("../../api/build/libs/api-0.0.1.jar".run(::File).path),
+//        files("../model/lib/build/libs/lib.jar".run(::File).path),
         "com.avast.gradle:gradle-docker-compose-plugin:0.17.6",
         "com.github.node-gradle:gradle-node-plugin:7.0.1",
         "jakarta.xml.bind:jakarta.xml.bind-api:4.0.2",

@@ -29,8 +29,8 @@ desktop.ini
 
 
 .gitignore
-workspace.yml
+../../office/settings/workspace.yml
 e3p0.yaml
 managed-jbake-context.yml
 private.properties
-training-institut-2598582b592a.json
+../../office/settings/training-institut-2598582b592a.json

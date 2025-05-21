@@ -3,8 +3,8 @@ codebase
 .project
 launch4j-3.50-linux-x64.tgz
 ../bibliotheque/private/cli_springboot_conversation.adoc
-config.yml
-config_initial.yml
+../../office/settings/config.yml
+../../office/settings/config_initial.yml
 .hypothesis
 demo.zip
 .kotlin
@@ -39,16 +39,15 @@ target
 output
 
 # extra private
-workspace.yml
+../../office/settings/workspace.yml
 e3p0.yaml
 managed-jbake-context.yml
 private.properties
 
 # windows personalisation
 desktop.ini
-training-institut-2598582b592a.json
+../../office/settings/training-institut-2598582b592a.json
 .next
 
 *.hprof
 /school-frontend/nbproject/private/
-/.webui_secret_key
