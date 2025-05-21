@@ -152,8 +152,12 @@ class PluginTests {
     }
 
     companion object {
-        private const val SPG_PATH = "/workspace/school/buildSrc/src/main/resources/training_8.json"
-        private const val SPGS_PATH = "/workspace/school/buildSrc/src/main/resources/trainings.json"
+        private const val SPG_PATH =
+//            "/workspace/school/buildSrc/src/main/resources/training_8.json"
+            "/workspace/__repositories__/workspace-engine/buildSrc/src/main/resources/training_8.json"
+        private const val SPGS_PATH =
+//            "/workspace/school/buildSrc/src/main/resources/trainings.json"
+            "/workspace/__repositories__/workspace-engine/buildSrc/src/main/resources/trainings.json"
 
         /**
          * return the project workspace configuration
@@ -189,7 +193,7 @@ class PluginTests {
                         notebooks = Notebooks(notebooks = "notebooks"),
                         pilotage = Pilotage(name = "pilotage"),
                         schemas = Schemas(name = "schemas"),
-                        slides = Slides(path = "${System.getProperty("user.home")}/workspace/bibliotheque/slides"),
+                        slides = Slides(path = "${System.getProperty("user.home")}/workspace/office/slides"),
                         sites = Sites(name = "sites")
                     ),
                     organisation = Organisation(organisation = "organisation"),
@@ -237,7 +241,11 @@ class PluginTests {
                 .let { "$it${SPGS_PATH}" }
                 .run(::File)
                 .readText()
-                .run { JsonMapper().readerForListOf(SPG::class.java).readValue<List<SPG>>(this) }
+                .run {
+                    JsonMapper()
+                        .readerForListOf(SPG::class.java)
+                        .readValue<List<SPG>>(this)
+                }
                 .forEach(::println)
         }
     }
