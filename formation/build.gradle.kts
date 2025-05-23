@@ -1,7 +1,7 @@
-import org.asciidoctor.gradle.jvm.slides.AsciidoctorJRevealJSTask
 import jbake.JBakeGhPagesManager.createCnameFile
 import jbake.JBakeGhPagesManager.sitePushDestPath
 import jbake.JBakeGhPagesManager.sitePushPathTo
+import org.asciidoctor.gradle.jvm.slides.AsciidoctorJRevealJSTask
 import slides.SlidesPlugin.RevealJsSlides.BUILD_GRADLE_KEY
 import slides.SlidesPlugin.RevealJsSlides.CODERAY_CSS_KEY
 import slides.SlidesPlugin.RevealJsSlides.DOCINFO_KEY
@@ -38,7 +38,6 @@ apply<school.courses.CoursesPlugin>()
 
 repositories { ruby { gems() } }
 
-@Suppress("LocalVariableName")
 tasks.getByName<AsciidoctorJRevealJSTask>(TASK_ASCIIDOCTOR_REVEALJS) {
     group = GROUP_TASK_SLIDER
     description = "Slider settings"
@@ -55,8 +54,10 @@ tasks.getByName<AsciidoctorJRevealJSTask>(TASK_ASCIIDOCTOR_REVEALJS) {
     val SLIDES = "slides"
     val IMAGES = "images"
     revealjsOptions {
-        "..$sep..$sep$OFFICE$sep$SLIDES"
+        //TODO: passer cette adresse a la configuration du slide pour indiquer sa source
+        "${System.getProperty("user.home")}${sep}workspace$sep$OFFICE$sep$SLIDES${sep}misc"
             .let(::File)
+            .apply { println("Slide source absolute path: $absolutePath") }
             .let(::setSourceDir)
         baseDirFollowsSourceFile()
         resources {
@@ -66,11 +67,10 @@ tasks.getByName<AsciidoctorJRevealJSTask>(TASK_ASCIIDOCTOR_REVEALJS) {
             }
         }
         mapOf(
-            BUILD_GRADLE_KEY to layout
-                .projectDirectory
+            BUILD_GRADLE_KEY to layout.projectDirectory
                 .let { "$it${sep}build.gradle.kts" }
                 .let(::File),
-            ENDPOINT_URL_KEY to "https://talaria-formation.github.io/",
+            ENDPOINT_URL_KEY to "https://github.com/pages-content/slides/",
             SOURCE_HIGHLIGHTER_KEY to "coderay",
             CODERAY_CSS_KEY to "style",
             IMAGEDIR_KEY to ".${sep}images",
