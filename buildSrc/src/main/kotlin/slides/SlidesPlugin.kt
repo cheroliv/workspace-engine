@@ -24,6 +24,7 @@ class SlidesPlugin : Plugin<Project> {
         const val TASK_ASCIIDOCTOR_REVEALJS = "asciidoctorRevealJs"
         const val TASK_CLEAN_SLIDES_BUILD = "cleanSlidesBuild"
         const val TASK_DASHBOARD_SLIDES_BUILD = "dashSlidesBuild"
+        const val TASK_PUBLISH_SLIDE = "publishSlide"
         const val BUILD_GRADLE_KEY = "build-gradle"
         const val ENDPOINT_URL_KEY = "endpoint-url"
         const val SOURCE_HIGHLIGHTER_KEY = "source-highlighter"

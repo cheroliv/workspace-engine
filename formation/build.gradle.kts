@@ -19,6 +19,7 @@ import slides.SlidesPlugin.RevealJsSlides.SETANCHORS_KEY
 import slides.SlidesPlugin.RevealJsSlides.SOURCE_HIGHLIGHTER_KEY
 import slides.SlidesPlugin.RevealJsSlides.TASK_ASCIIDOCTOR_REVEALJS
 import slides.SlidesPlugin.RevealJsSlides.TASK_CLEAN_SLIDES_BUILD
+import slides.SlidesPlugin.RevealJsSlides.TASK_DASHBOARD_SLIDES_BUILD
 import slides.SlidesPlugin.RevealJsSlides.TOC_KEY
 import workspace.WorkspaceManager.GROUP_TASK_SITE
 import workspace.WorkspaceManager.TASK_BAKE_SITE
@@ -43,7 +44,7 @@ tasks.getByName<AsciidoctorJRevealJSTask>(TASK_ASCIIDOCTOR_REVEALJS) {
     group = GROUP_TASK_SLIDER
     description = "Slider settings"
     dependsOn(TASK_CLEAN_SLIDES_BUILD)
-    finalizedBy("dashSlidesBuild")
+    finalizedBy(TASK_DASHBOARD_SLIDES_BUILD)
     revealjs {
         version = "3.1.0"
         templateGitHub {

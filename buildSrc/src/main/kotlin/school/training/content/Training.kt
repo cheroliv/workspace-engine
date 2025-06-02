@@ -10,3 +10,4 @@ data class Training(
     val spg: SPG,
     val spds: Set<SPD> = mutableSetOf(),
 )
+const val TASK_PUBLISH_TRAINING = "publishTraining"
