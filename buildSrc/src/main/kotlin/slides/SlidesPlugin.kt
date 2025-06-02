@@ -100,11 +100,6 @@ class SlidesPlugin : Plugin<Project> {
                             .run(project.logger::info)
                     }
 
-                project.layout.buildDirectory
-                    .get().asFile.path
-//                            .apply(::println)
-                    .run(project.logger::info)
-
                 val outputDir = project.layout.buildDirectory.get().asFile
                     .run { "$this/docs/asciidocRevealJs" }
                     .run(::File)
@@ -119,54 +114,52 @@ class SlidesPlugin : Plugin<Project> {
                     .apply {
                         readText().trimIndent()
                             .run { "index.html:\n$this" }
-                            .apply(::println)
-//                            .run(project.logger::info)
+//                            .apply(::println)
+                            .run(project.logger::info)
                     }
+
                 val slidesJsonFile = File("$outputDir/slides.json")
 
-//
-//                // Créer le dossier de sortie s'il n'existe pas
-//                outputDir.mkdirs()
-//
-//                // Scanner les fichiers .adoc dans le dossier slides
-//                val adocFiles = slidesDir.listFiles { file ->
-//                    file.isFile && file.extension == "adoc"
-//                }?.map { file ->
-//                    mapOf(
-//                        "name" to file.nameWithoutExtension,
-//                        "filename" to "${file.nameWithoutExtension}.html"
-//                    )
-//                } ?: emptyList()
-//
-//                // Générer le fichier slides.json
-//                val jsonContent = buildString {
-//                    appendLine("[")
-//                    adocFiles.forEachIndexed { index, slide ->
-//                        append("  {")
-//                        append("\"name\": \"${slide["name"]}\", ")
-//                        append("\"filename\": \"${slide["filename"]}\"")
-//                        append("}")
-//                        if (index < adocFiles.size - 1) append(",")
-//                        appendLine()
-//                    }
-//                    appendLine("]")
-//                }
-//
-//                slidesJsonFile.writeText(jsonContent)
-//
-//
-//                // Générer le fichier index.html
-//                val htmlContent = slidesDir.listFiles()
-//                    .find { it.name == "index.html" }!!
-//                    .readText().trimIndent()
-//
-//                indexFile.writeText(htmlContent)
-//
-//                println("✅ Dashboard généré avec succès !")
-//                println("📁 Fichiers générés :")
-//                println("   - ${indexFile.absolutePath}")
-//                println("   - ${slidesJsonFile.absolutePath}")
-//                println("📊 ${adocFiles.size} présentation(s) trouvée(s)")
+
+                // Créer le dossier de sortie s'il n'existe pas
+                outputDir.mkdirs()
+
+                // Scanner les fichiers .adoc dans le dossier slides
+                val adocFiles = slidesDir.listFiles { file ->
+                    file.isFile && file.extension == "adoc"
+                }?.map { file ->
+                    mapOf(
+                        "name" to file.nameWithoutExtension,
+                        "filename" to "${file.nameWithoutExtension}.html"
+                    )
+                }.apply { println(this) } ?: emptyList()
+
+                // Générer le fichier slides.json
+                val jsonContent = buildString {
+                    appendLine("[")
+                    adocFiles.forEachIndexed { index, slide ->
+                        append("  {")
+                        append("\"name\": \"${slide["name"]}\", ")
+                        append("\"filename\": \"${slide["filename"]}\"")
+                        append("}")
+                        if (index < adocFiles.size - 1) append(",")
+                        appendLine()
+                    }
+                    appendLine("]")
+                }
+
+                slidesJsonFile.writeText(jsonContent)
+
+                // Générer le fichier index.html
+                slidesDir.listFiles()
+                    .find { it.name == "index.html" }!!
+                    .copyTo(File("${outputDir}/index.html"), true)
+
+                println("✅ Dashboard généré avec succès !")
+                println("📁 Fichiers générés :")
+                println("   - ${indexFile.absolutePath}")
+                println("   - ${slidesJsonFile.absolutePath}")
+                println("📊 ${adocFiles.size} présentation(s) trouvée(s)")
             }
         }
 
@@ -258,6 +251,7 @@ class SlidesPlugin : Plugin<Project> {
             doFirst { "Task description :\n\t$description".run(project.logger::info) }
             doLast {
                 project.localConf
+
                     .let(project.yamlMapper::writeValueAsString)
                     .let(project.logger::info)
 //                project.workspaceEither.fold(

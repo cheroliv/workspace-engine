@@ -12,7 +12,6 @@ class AssistantPlugin : Plugin<Project> {
             description = "Dislpay on console AI prompt assistant"
             doFirst { AssistantManager.PromptManager.userMessageFr.let(::println) }
         }
-
         // Creating tasks for each model
         project.createChatTasks()
     }

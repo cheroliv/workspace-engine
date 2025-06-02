@@ -2,6 +2,10 @@
 
 package translate
 
+import ai.AssistantManager.createOllamaChatModel
+import ai.AssistantManager.createOllamaStreamingChatModel
+import ai.AssistantManager.generateStreamingResponse
+import ai.AssistantManager.localModels
 import arrow.core.Either.Left
 import arrow.core.Either.Right
 import kotlinx.coroutines.runBlocking
@@ -10,22 +14,13 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.options.Option
 import org.gradle.kotlin.dsl.task
-import ai.AssistantManager.createOllamaChatModel
-import ai.AssistantManager.createOllamaStreamingChatModel
-import ai.AssistantManager.generateStreamingResponse
 import translate.TranslatorManager.PromptManager.getTranslatePromptMessage
 import workspace.WorkspaceUtils.uppercaseFirstChar
-import java.util.Locale.ENGLISH
-import java.util.Locale.FRENCH
-import java.util.Locale.GERMAN
-import java.util.Locale.ITALIAN
-import java.util.Locale.SIMPLIFIED_CHINESE
-import java.util.Locale.forLanguageTag
-import kotlin.collections.filter
-import kotlin.collections.forEach
+import java.util.Locale.*
 
 object TranslatorManager {
-    const val MODEL = "llama3.2:3b-instruct-q8_0"
+    val MODEL: String = localModels.find { it.second == "LlamaTiny" }
+        ?.first ?: ""
 
     @JvmStatic
     fun main(args: Array<String>) {
@@ -43,11 +38,11 @@ object TranslatorManager {
 
     @JvmStatic
     val supportedLanguages: Set<String> = setOf(
-        FRENCH, ENGLISH, GERMAN,
+        FRENCH, ENGLISH/*, GERMAN,
         ITALIAN, SIMPLIFIED_CHINESE,
         forLanguageTag("ru"),
         forLanguageTag("es"),
-        forLanguageTag("pt"),
+        forLanguageTag("pt"),*/
     ).map { it.language }.toSet()
 
     @JvmStatic

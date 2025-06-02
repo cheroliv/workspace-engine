@@ -32,9 +32,8 @@ object AssistantManager {
     val localModels
         get() = setOf(
             "smollm:135m" to "SmollM",
-            "llama3.2:3b" to "LlamaTiny",
-            "dolphin-llama3:8b" to "DolphinSmall",
-            "aya:8b" to "AyaSmall",
+            "llama3.2:3b-instruct-q8_0 " to "LlamaTiny",
+            "smollm:135m-instruct-v0.2-q8_0" to "SmollMInstruct",
         )
 
     // Creating tasks for each model
