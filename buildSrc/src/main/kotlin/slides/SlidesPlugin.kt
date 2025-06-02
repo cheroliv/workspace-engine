@@ -8,6 +8,7 @@ import org.gradle.api.tasks.Exec
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.repositories
 import slides.SlidesManager.deckFile
+import slides.SlidesPlugin.RevealJsSlides.TASK_DASHBOARD_SLIDES_BUILD
 import workspace.WorkspaceManager.localConf
 import workspace.WorkspaceUtils.yamlMapper
 import java.io.File
@@ -22,6 +23,7 @@ class SlidesPlugin : Plugin<Project> {
         const val GROUP_TASK_SLIDER = "slider"
         const val TASK_ASCIIDOCTOR_REVEALJS = "asciidoctorRevealJs"
         const val TASK_CLEAN_SLIDES_BUILD = "cleanSlidesBuild"
+        const val TASK_DASHBOARD_SLIDES_BUILD = "dashSlidesBuild"
         const val BUILD_GRADLE_KEY = "build-gradle"
         const val ENDPOINT_URL_KEY = "endpoint-url"
         const val SOURCE_HIGHLIGHTER_KEY = "source-highlighter"
@@ -75,6 +77,79 @@ class SlidesPlugin : Plugin<Project> {
             dependsOn("asciidoctor")
             commandLine("chromium", project.deckFile("default.deck.file"))
             workingDir = project.layout.projectDirectory.asFile
+        }
+
+        project.tasks.register(TASK_DASHBOARD_SLIDES_BUILD) {
+            group = "documentation"
+            description = "Génère un index.html listant toutes les présentations Reveal.js"
+
+            doLast {
+                //TODO: passer cette adresse a la configuration du slide pour indiquer sa source
+                val slidesDir = listOf(
+                    System.getProperty("user.home"),
+                    "workspace", "office", "slides", "misc"
+                ).reduce { acc, part -> File(acc, part).path }
+                    .let(::File)
+                    .apply {
+//                        project.logger.info(
+                        println(
+                            listFiles().find { it.name == "index.html" }!!.readText()
+                        )
+                    }
+
+                println(project.layout.buildDirectory.get().asFile.path)
+                val outputDir = project.layout.buildDirectory.get().asFile
+                    .run { "$this/docs/asciidocRevealJs" }
+                    .run(::File)
+                    .apply {
+                        println("output dir path: $this")
+                    }
+//                val indexFile = File("$slidesDir/index.html")
+//                val slidesJsonFile = File("$outputDir/slides.json")
+//
+//                // Créer le dossier de sortie s'il n'existe pas
+//                outputDir.mkdirs()
+//
+//                // Scanner les fichiers .adoc dans le dossier slides
+//                val adocFiles = slidesDir.listFiles { file ->
+//                    file.isFile && file.extension == "adoc"
+//                }?.map { file ->
+//                    mapOf(
+//                        "name" to file.nameWithoutExtension,
+//                        "filename" to "${file.nameWithoutExtension}.html"
+//                    )
+//                } ?: emptyList()
+//
+//                // Générer le fichier slides.json
+//                val jsonContent = buildString {
+//                    appendLine("[")
+//                    adocFiles.forEachIndexed { index, slide ->
+//                        append("  {")
+//                        append("\"name\": \"${slide["name"]}\", ")
+//                        append("\"filename\": \"${slide["filename"]}\"")
+//                        append("}")
+//                        if (index < adocFiles.size - 1) append(",")
+//                        appendLine()
+//                    }
+//                    appendLine("]")
+//                }
+//
+//                slidesJsonFile.writeText(jsonContent)
+//
+//
+//                // Générer le fichier index.html
+//                val htmlContent = slidesDir.listFiles()
+//                    .find { it.name == "index.html" }!!
+//                    .readText().trimIndent()
+//
+//                indexFile.writeText(htmlContent)
+//
+//                println("✅ Dashboard généré avec succès !")
+//                println("📁 Fichiers générés :")
+//                println("   - ${indexFile.absolutePath}")
+//                println("   - ${slidesJsonFile.absolutePath}")
+//                println("📊 ${adocFiles.size} présentation(s) trouvée(s)")
+            }
         }
 
         //TODO: passer cette tache de script en tache programmatique de plugin

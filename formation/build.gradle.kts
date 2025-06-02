@@ -38,10 +38,12 @@ apply<school.courses.CoursesPlugin>()
 
 repositories { ruby { gems() } }
 
+
 tasks.getByName<AsciidoctorJRevealJSTask>(TASK_ASCIIDOCTOR_REVEALJS) {
     group = GROUP_TASK_SLIDER
     description = "Slider settings"
     dependsOn(TASK_CLEAN_SLIDES_BUILD)
+    finalizedBy("dashSlidesBuild")
     revealjs {
         version = "3.1.0"
         templateGitHub {
