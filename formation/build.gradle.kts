@@ -71,6 +71,7 @@ tasks.getByName<AsciidoctorJRevealJSTask>(TASK_ASCIIDOCTOR_REVEALJS) {
         }
         mapOf(
             BUILD_GRADLE_KEY to layout.projectDirectory
+                .asFile
                 .let { "$it${sep}build.gradle.kts" }
                 .let(::File),
             ENDPOINT_URL_KEY to "https://github.com/pages-content/slides/",
