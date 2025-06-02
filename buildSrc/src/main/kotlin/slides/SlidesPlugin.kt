@@ -1,5 +1,9 @@
 package slides
 
+import com.fasterxml.jackson.module.kotlin.readValue
+import git.GitPushConfiguration
+import git.RepositoryConfiguration
+import git.RepositoryCredentials
 import org.asciidoctor.gradle.jvm.AsciidoctorTask
 import org.gradle.api.DefaultTask
 import org.gradle.api.Plugin

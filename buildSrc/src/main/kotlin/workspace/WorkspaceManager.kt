@@ -125,29 +125,6 @@ object WorkspaceManager {
         )
     }
 
-    fun Project.readSlideConfigurationFile(
-        configPath: () -> String
-    ): SlidesConfiguration = try {
-        configPath()
-            .run(::File)
-            .run(yamlMapper::readValue)
-    } catch (e: Exception) {
-        // Handle exception or log error
-        SlidesConfiguration(
-            srcPath = "",
-            pushPage = GitPushConfiguration(
-                "",
-                "",
-                RepositoryConfiguration(
-                    "",
-                    "",
-                    RepositoryCredentials("", "")
-                ),
-                "",
-                ""
-            )
-        )
-    }
 
     fun Project.initAddCommitToSite(
         repoDir: File,
