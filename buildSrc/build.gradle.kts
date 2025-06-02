@@ -16,7 +16,7 @@ repositories {
 object Constants {
     const val langchain4jVersion = "1.0.0-beta1"//"0.36.2"
     const val asciidoctorGradleVersion = "4.0.0-alpha.1"
-//    const val asciidoctorGradleVersion = "4.0.4"
+    //    const val asciidoctorGradleVersion = "4.0.4"
     const val jacksonVersion = "2.17.2"//2.18.0
     const val arrowKtVersion = "1.2.4"
     const val jgitVersion = "6.10.0.202406032230-r"
@@ -62,13 +62,13 @@ dependencies {
         "dev.langchain4j:langchain4j-google-ai-gemini:${Constants.langchain4jVersion}",
         "dev.langchain4j:langchain4j-mistral-ai:${Constants.langchain4jVersion}",
         "dev.langchain4j:langchain4j-pgvector:${Constants.langchain4jVersion}",
-
 //        "org.testcontainers:testcontainers:$testcontainersVersion",
 //        "org.testcontainers:ollama:$testcontainersVersion",
     ).forEach(::implementation)
     runtimeOnly("com.sun.xml.bind:jaxb-impl:4.0.5")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+//    implementation("org.jetbrains.kotlin.multiplatform:org.jetbrains.kotlin.multiplatform.gradle.plugin:1.9.20")    implementation("org.jetbrains.kotlin.multiplatform:org.jetbrains.kotlin.multiplatform.gradle.plugin:1.9.20")
 }
 
 val functionalTestSourceSet: SourceSet = sourceSets.create("functionalTest")

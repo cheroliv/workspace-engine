@@ -92,21 +92,38 @@ class SlidesPlugin : Plugin<Project> {
                 ).reduce { acc, part -> File(acc, part).path }
                     .let(::File)
                     .apply {
-//                        project.logger.info(
-                        println(
-                            listFiles().find { it.name == "index.html" }!!.readText()
-                        )
+                        listFiles().find {
+                            it.name == "index.html"
+                        }!!.readText().trimIndent()
+                            .run { "index.html:\n$this" }
+//                            .apply(::println)
+                            .run(project.logger::info)
                     }
 
-                println(project.layout.buildDirectory.get().asFile.path)
+                project.layout.buildDirectory
+                    .get().asFile.path
+//                            .apply(::println)
+                    .run(project.logger::info)
+
                 val outputDir = project.layout.buildDirectory.get().asFile
                     .run { "$this/docs/asciidocRevealJs" }
                     .run(::File)
                     .apply {
-                        println("output dir path: $this")
+                        "output dir path: $this"
+//                            .apply(::println)
+                            .run(project.logger::info)
                     }
-//                val indexFile = File("$slidesDir/index.html")
-//                val slidesJsonFile = File("$outputDir/slides.json")
+
+                val indexFile: File = "$slidesDir/index.html"
+                    .run(::File)
+                    .apply {
+                        readText().trimIndent()
+                            .run { "index.html:\n$this" }
+                            .apply(::println)
+//                            .run(project.logger::info)
+                    }
+                val slidesJsonFile = File("$outputDir/slides.json")
+
 //
 //                // Créer le dossier de sortie s'il n'existe pas
 //                outputDir.mkdirs()
@@ -238,11 +255,11 @@ class SlidesPlugin : Plugin<Project> {
             group = "slider"
             description = "Deploy sliders to remote repository"
             dependsOn("asciidoctor")
-            doFirst { println("Task description :\n\t$description") }
+            doFirst { "Task description :\n\t$description".run(project.logger::info) }
             doLast {
                 project.localConf
                     .let(project.yamlMapper::writeValueAsString)
-                    .let(::println)
+                    .let(project.logger::info)
 //                project.workspaceEither.fold(
 //                    { "Error: $it".run(::println) },
 //                    { it: Office ->

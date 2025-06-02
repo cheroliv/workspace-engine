@@ -32,6 +32,7 @@ import workspace.WorkspaceUtils.sep
 plugins {
     id("org.jbake.site")
     id("org.asciidoctor.jvm.revealjs")
+    kotlin("multiplatform")
 }
 
 apply<slides.SlidesPlugin>()
@@ -39,6 +40,15 @@ apply<school.courses.CoursesPlugin>()
 
 repositories { ruby { gems() } }
 
+kotlin {
+    js {
+        browser {
+//            fire
+        }
+        binaries.executable()
+    }
+    sourceSets.commonTest.dependencies { implementation(kotlin("test")) }
+}
 
 tasks.getByName<AsciidoctorJRevealJSTask>(TASK_ASCIIDOCTOR_REVEALJS) {
     group = GROUP_TASK_SLIDER
