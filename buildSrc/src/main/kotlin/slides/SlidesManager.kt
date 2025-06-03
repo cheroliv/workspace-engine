@@ -64,8 +64,20 @@ object SlidesManager {
     fun Project.deckFile(key: String): String = buildString {
         append("build/docs/asciidocRevealJs/")
         append(Properties().apply {
-            "$projectDir/deck.properties"
-                .let(::File)
+            // TODO changer par une reference au path de office a integrer dans le model de données
+            buildString {
+                append(System.getProperty("user.home"))
+                append(sep)
+                append("workspace")
+                append(sep)
+                append("office")
+                append(sep)
+                append("slides")
+                append(sep)
+                append("misc")
+                append(sep)
+                append("deck.properties")
+            }.let(::File)
                 .inputStream()
                 .use(::load)
         }[key].toString())
