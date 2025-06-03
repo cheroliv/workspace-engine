@@ -104,7 +104,6 @@ class SlidesPlugin : Plugin<Project> {
                             it.name == "index.html"
                         }!!.readText().trimIndent()
                             .run { "index.html:\n$this" }
-//                            .apply(::println)
                             .run(project.logger::info)
                     }
 
@@ -113,7 +112,6 @@ class SlidesPlugin : Plugin<Project> {
                     .run(::File)
                     .apply {
                         "output dir path: $this"
-//                            .apply(::println)
                             .run(project.logger::info)
                     }
 
@@ -122,7 +120,6 @@ class SlidesPlugin : Plugin<Project> {
                     .apply {
                         readText().trimIndent()
                             .run { "index.html:\n$this" }
-//                            .apply(::println)
                             .run(project.logger::info)
                     }
 
@@ -194,8 +191,6 @@ class SlidesPlugin : Plugin<Project> {
             }
         }
 
-
-
         project.tasks.register<Exec>("asciidocCapsule") {
             group = "capsule"
             dependsOn("asciidoctor")
@@ -204,45 +199,3 @@ class SlidesPlugin : Plugin<Project> {
         }
     }
 }
-// kotlin/js config sample :
-//plugins {
-//    kotlin("multiplatform")
-//    id("org.jbake.site")
-//    id("org.asciidoctor.jvm.revealjs")
-//}
-//
-//apply<slides.SlidesPlugin>()
-//apply<school.courses.CoursesPlugin>()
-//
-//repositories { ruby { gems() } }
-//kotlin {
-//    sourceSets {
-////        val jsMain by getting {
-////            dependencies {
-////                implementation(npm("bootstrap", ">= 5.3.6"))
-////                implementation(npm("bootstrap-icons", ">= 1.13.1"))
-////            }
-////        }
-//        commonTest.dependencies {
-//            implementation(kotlin("test"))
-//        }
-//    }
-//
-//    js {
-////        moduleName = "site"
-//        compilations["main"].packageJson {
-//            customField("hello", mapOf("one" to 1, "two" to 2))
-//        }
-//        browser {
-//            distribution {
-//                outputDirectory.set(projectDir.resolve("output"))
-//            }
-//        }
-//        binaries.executable()
-//
-//    }
-//    sourceSets.commonTest.dependencies { implementation(kotlin("test")) }
-//}
-//tasks.withType<KotlinJsCompile>().configureEach {
-//    compilerOptions { target.set("es2015") }
-//}
