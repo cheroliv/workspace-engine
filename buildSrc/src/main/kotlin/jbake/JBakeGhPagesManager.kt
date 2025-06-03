@@ -33,11 +33,11 @@ object JBakeGhPagesManager {
         { "${layout.buildDirectory.get().asFile.absolutePath}$sep${localConf.pushPage.to}" }
 
     fun Project.cnamePath() =
-        "${project.layout.buildDirectory.get().asFile.absolutePath}$sep${localConf.bake.destDirPath}$sep$CNAME"
+        "${project.layout.buildDirectory.get().asFile.absolutePath}$sep${localConf.bake?.destDirPath}$sep$CNAME"
 
     fun Project.createCnameFile() {
         when {
-            localConf.bake.cname != null && localConf.bake.cname!!.isNotBlank() ->
+            localConf.bake?.cname != null && localConf.bake?.cname!!.isNotBlank() ->
                 cnamePath()
                     .let(::File)
                     .run {
@@ -49,7 +49,7 @@ object JBakeGhPagesManager {
                             exists() -> throw Exception("Destination path should exists : $this")
                             !createNewFile() -> throw Exception("Can't create path : $this")
                             else -> {
-                                appendText(localConf.bake.cname ?: "", UTF_8)
+                                appendText(localConf.bake?.cname ?: "", UTF_8)
                                 if ((exists() && !isDirectory).not()) throw Exception("Destination created but not a directory : $this")
                             }
                         }

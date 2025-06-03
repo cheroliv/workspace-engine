@@ -9,5 +9,8 @@ data class Training(
     val pilotage: QuintilianApproach,
     val spg: SPG,
     val spds: Set<SPD> = mutableSetOf(),
-)
-const val TASK_PUBLISH_TRAINING = "publishTraining"
+){
+    companion object {
+        const val TASK_PUBLISH_TRAINING = "publishTraining"
+    }
+}

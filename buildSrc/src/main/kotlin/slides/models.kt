@@ -4,6 +4,6 @@ import git.GitPushConfiguration
 
 @JvmRecord
 data class SlidesConfiguration(
-    val srcPath: String,
-    val pushPage: GitPushConfiguration,
+    val srcPath: String?=null,
+    val pushSlides: GitPushConfiguration?=null,
 )

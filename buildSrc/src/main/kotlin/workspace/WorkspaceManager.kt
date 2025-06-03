@@ -39,8 +39,8 @@ object WorkspaceManager {
     const val GROUP_TASK_SITE = "site"
     const val CONFIG_PATH_KEY = "managed_config_path"
 
-    val Project.bakeSrcPath: String get() = localConf.bake.srcPath
-    val Project.bakeDestDirPath: String get() = localConf.bake.destDirPath
+    val Project.bakeSrcPath: String get() = localConf.bake?.srcPath!!
+    val Project.bakeDestDirPath: String get() = localConf.bake?.destDirPath!!
     val Project.workspacePath get() = "$projectDir$sep${properties[WORKSPACE_PATH_KEY]}"
     val Project.localConf: SiteConfiguration
         get() = readSiteConfigurationFile { "$rootDir$sep${properties[CONFIG_PATH_KEY]}" }

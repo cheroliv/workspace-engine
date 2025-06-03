@@ -1,6 +1,3 @@
-import jbake.JBakeGhPagesManager.createCnameFile
-import jbake.JBakeGhPagesManager.sitePushDestPath
-import jbake.JBakeGhPagesManager.sitePushPathTo
 import org.asciidoctor.gradle.jvm.slides.AsciidoctorJRevealJSTask
 import slides.SlidesPlugin.RevealJsSlides.BUILD_GRADLE_KEY
 import slides.SlidesPlugin.RevealJsSlides.CODERAY_CSS_KEY
@@ -21,12 +18,6 @@ import slides.SlidesPlugin.RevealJsSlides.TASK_ASCIIDOCTOR_REVEALJS
 import slides.SlidesPlugin.RevealJsSlides.TASK_CLEAN_SLIDES_BUILD
 import slides.SlidesPlugin.RevealJsSlides.TASK_DASHBOARD_SLIDES_BUILD
 import slides.SlidesPlugin.RevealJsSlides.TOC_KEY
-import workspace.WorkspaceManager.GROUP_TASK_SITE
-import workspace.WorkspaceManager.TASK_BAKE_SITE
-import workspace.WorkspaceManager.TASK_PUBLISH_SITE
-import workspace.WorkspaceManager.bakeDestDirPath
-import workspace.WorkspaceManager.bakeSrcPath
-import workspace.WorkspaceManager.pushSiteToGhPages
 import workspace.WorkspaceUtils.sep
 
 plugins {
@@ -56,7 +47,8 @@ tasks.getByName<AsciidoctorJRevealJSTask>(TASK_ASCIIDOCTOR_REVEALJS) {
     val SLIDES = "slides"
     val IMAGES = "images"
     revealjsOptions {
-        //TODO: passer cette adresse a la configuration du slide pour indiquer sa source
+        //TODO: passer cette adresse a la configuration du slide pour indiquer sa source,
+        // creer une localConf de type slides.SlidesConfiguration
         "${System.getProperty("user.home")}${sep}workspace$sep$OFFICE$sep$SLIDES${sep}misc"
             .let(::File)
             .apply { println("Slide source absolute path: $absolutePath") }
@@ -90,58 +82,3 @@ tasks.getByName<AsciidoctorJRevealJSTask>(TASK_ASCIIDOCTOR_REVEALJS) {
         ).let(::attributes)
     }
 }
-
-tasks.register<DefaultTask>(TASK_PUBLISH_SITE) {
-    group = GROUP_TASK_SITE
-    description = "Publish site online."
-    dependsOn(TASK_BAKE_SITE)
-    doFirst { createCnameFile() }
-    jbake {
-        srcDirName = bakeSrcPath
-        destDirName = bakeDestDirPath
-    }
-    doLast { pushSiteToGhPages(sitePushDestPath(), sitePushPathTo()) }
-}
-
-// kotlin/js config sample :
-//plugins {
-//    kotlin("multiplatform")
-//    id("org.jbake.site")
-//    id("org.asciidoctor.jvm.revealjs")
-//}
-//
-//apply<slides.SlidesPlugin>()
-//apply<school.courses.CoursesPlugin>()
-//
-//repositories { ruby { gems() } }
-//kotlin {
-//    sourceSets {
-////        val jsMain by getting {
-////            dependencies {
-////                implementation(npm("bootstrap", ">= 5.3.6"))
-////                implementation(npm("bootstrap-icons", ">= 1.13.1"))
-////            }
-////        }
-//        commonTest.dependencies {
-//            implementation(kotlin("test"))
-//        }
-//    }
-//
-//    js {
-////        moduleName = "site"
-//        compilations["main"].packageJson {
-//            customField("hello", mapOf("one" to 1, "two" to 2))
-//        }
-//        browser {
-//            distribution {
-//                outputDirectory.set(projectDir.resolve("output"))
-//            }
-//        }
-//        binaries.executable()
-//
-//    }
-//    sourceSets.commonTest.dependencies { implementation(kotlin("test")) }
-//}
-//tasks.withType<KotlinJsCompile>().configureEach {
-//    compilerOptions { target.set("es2015") }
-//}

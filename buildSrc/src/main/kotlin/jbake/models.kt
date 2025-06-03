@@ -5,7 +5,7 @@ import git.GitPushConfiguration
 //object SiteInfo{}
 @JvmRecord
 data class SiteConfiguration(
-    val bake: BakeConfiguration,
+    val bake: BakeConfiguration?=null,
     val pushPage: GitPushConfiguration,
     val pushSource: GitPushConfiguration? = null,
     val pushTemplate: GitPushConfiguration? = null,

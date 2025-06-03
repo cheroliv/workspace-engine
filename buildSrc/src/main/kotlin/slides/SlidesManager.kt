@@ -1,26 +1,64 @@
 package slides
 
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import git.FileOperationResult
-import jbake.SiteConfiguration
+import git.GitPushConfiguration
+import git.RepositoryConfiguration
+import git.RepositoryCredentials
+import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.revwalk.RevCommit
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder
+import org.eclipse.jgit.transport.PushResult
+import org.eclipse.jgit.transport.URIish
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider
 import org.gradle.api.Project
 import workspace.WorkspaceManager
-import workspace.WorkspaceManager.CONFIG_PATH_KEY
-import workspace.WorkspaceManager.initAddCommitToSite
-import workspace.WorkspaceManager.pushSite
-import workspace.WorkspaceManager.readSiteConfigurationFile
+import workspace.WorkspaceManager.CVS_ORIGIN
+import workspace.WorkspaceManager.CVS_REMOTE
 import workspace.WorkspaceUtils.sep
+import workspace.WorkspaceUtils.yamlMapper
 import java.io.File
+import java.io.IOException
 import java.util.*
 
-//TODO: deploy slides to a repo per whole training program https://github.com/talaria-formation/prepro-cda.git
 
 object SlidesManager {
+    const val CONFIG_PATH_KEY = "managed_config_path"
 
-    val Project.slideSrcPath: String get() = "${layout.buildDirectory.get().asFile.absolutePath}/docs/asciidocRevealJs/"
-    val Project.slideDestDirPath: String get() = localConf.bake.destDirPath
+    fun Project.readSlidesConfigurationFile(
+        configPath: () -> String
+    ): SlidesConfiguration = try {
+        configPath()
+            .run(::File)
+            .run(yamlMapper::readValue)
+    } catch (e: Exception) {
+        // Handle exception or log error
+        SlidesConfiguration(
+            "",
+            GitPushConfiguration(
+                "",
+                "",
+                RepositoryConfiguration(
+                    "",
+                    "",
+                    RepositoryCredentials(
+                        "",
+                        ""
+                    )
+                ),
+                "",
+                ""
+            )
+        )
+    }
 
-    val Project.localConf: SiteConfiguration
-        get() = readSiteConfigurationFile { "$rootDir$sep${properties[CONFIG_PATH_KEY]}" }
+
+    val Project.localConf: SlidesConfiguration
+        get() = readSlidesConfigurationFile { "$rootDir$sep${properties[CONFIG_PATH_KEY]}" }
+
+    val Project.slideSrcPath: String get() = "${layout.buildDirectory.get().asFile.absolutePath}/${localConf.srcPath}/"
+    val Project.slideDestDirPath: String get() = localConf.pushSlides?.to!!
 
 
     fun Project.deckFile(key: String): String = buildString {
@@ -33,24 +71,90 @@ object SlidesManager {
         }[key].toString())
     }
 
-    @Suppress("unused")
     fun Project.pushSlides(
-        destPath: () -> String,
+        slidesDirPath: () -> String,
         pathTo: () -> String
     ) = pathTo()
         .run(WorkspaceManager::createRepoDir)
         .let { it: File ->
-            copySlideFilesToRepo(destPath(), it)
+            copySlideFilesToRepo(slidesDirPath(), it)
                 .takeIf { it is FileOperationResult.Success }
                 ?.run {
-                    initAddCommitToSite(it, localConf)
-                    pushSite(it, localConf)
+                    initAddCommitToSlides(it, localConf)
+                    pushSlide(
+                        it,
+                        "${project.rootDir}${sep}${project.properties[CONFIG_PATH_KEY]}"
+                            .run(::File)
+                            .readText()
+                            .trimIndent()
+                            .run(YAMLMapper()::readValue)
+                    )
                     it.deleteRecursively()
-                    destPath()
+                    slidesDirPath()
                         .let(::File)
                         .deleteRecursively()
                 }
         }
+
+    @Throws(IOException::class)
+    fun Project.pushSlide(
+        repoDir: File,
+        conf: SlidesConfiguration,
+    ): MutableIterable<PushResult>? = FileRepositoryBuilder()
+        .setInitialBranch("main")
+        .setGitDir("${repoDir.absolutePath}$sep.git".let(::File))
+        .readEnvironment()
+        .findGitDir()
+        .setMustExist(true)
+        .build()
+        .apply {
+            config.apply {
+                getString(
+                    CVS_REMOTE,
+                    CVS_ORIGIN,
+                    conf.pushSlides?.repo?.repository
+                )
+            }.save()
+            if (isBare) throw IOException("Repo dir should not be bare")
+        }.let(::Git)
+        .run {
+            // push to remote:
+            return push().setCredentialsProvider(
+                UsernamePasswordCredentialsProvider(
+                    conf.pushSlides?.repo?.credentials?.username,
+                    conf.pushSlides?.repo?.credentials?.password
+                )
+            ).apply {
+                //you can add more settings here if needed
+                remote = CVS_ORIGIN
+                isForce = true
+
+            }.call()
+        }
+
+    fun Project.initAddCommitToSlides(
+        repoDir: File,
+        conf: SlidesConfiguration,
+    ): RevCommit {
+        //3) initialiser un repo dans le dossier cvs
+        Git.init().setInitialBranch(conf.pushSlides?.branch)
+            .setDirectory(repoDir).call().run {
+                assert(!repository.isBare)
+                assert(repository.directory.isDirectory)
+                // add remote repo:
+                remoteAdd().apply {
+                    setName(CVS_ORIGIN)
+                    setUri(URIish(conf.pushSlides?.repo?.repository))
+                    // you can add more settings here if needed
+
+                }.call()
+                //4) ajouter les fichiers du dossier cvs à l'index
+                add().addFilepattern(".").call()
+
+                //5) commit
+                return commit().setMessage(conf.pushSlides?.message).call()
+            }
+    }
 
     @Suppress("MemberVisibilityCanBePrivate")
     fun copySlideFilesToRepo(
@@ -72,107 +176,3 @@ object SlidesManager {
         FileOperationResult.Failure(e.message ?: "An error occurred during file copy.")
     }
 }
-
-
-/*package slides
-
-import com.fasterxml.jackson.module.kotlin.readValue
-import git.FileOperationResult
-import git.GitPushConfiguration
-import git.RepositoryConfiguration
-import git.RepositoryCredentials
-import org.gradle.api.Project
-import workspace.WorkspaceManager
-import workspace.WorkspaceManager.CONFIG_PATH_KEY
-import workspace.WorkspaceManager.initAddCommitToSite
-import workspace.WorkspaceManager.pushSite
-import workspace.WorkspaceUtils.sep
-import workspace.WorkspaceUtils.yamlMapper
-import java.io.File
-import java.util.*
-
-//TODO: deploy slides to a repo per whole training program https://github.com/talaria-formation/prepro-cda.git
-
-object SlidesManager {
-
-    val Project.slideSrcPath: String get() = "${layout.buildDirectory.get().asFile.absolutePath}/docs/asciidocRevealJs/"
-
-    val Project.slideDestDirPath: String get() = localConf.bake.destDirPath
-
-    fun Project.readSlideConfigurationFile(
-        configPath: () -> String
-    ): SlidesConfiguration = try {
-        configPath()
-            .run(::File)
-            .run(yamlMapper::readValue)
-    } catch (e: Exception) {
-        // Handle exception or log error
-        SlidesConfiguration(
-            srcPath = "",
-            pushPage = GitPushConfiguration(
-                "",
-                "",
-                RepositoryConfiguration(
-                    "",
-                    "",
-                    RepositoryCredentials("", "")
-                ),
-                "",
-                ""
-            )
-        )
-    }
-
-    val Project.localConf: SlidesConfiguration
-        get() = readSlideConfigurationFile { "$rootDir$sep${properties[CONFIG_PATH_KEY]}" }
-
-
-    fun Project.deckFile(key: String): String = buildString {
-        append("build/docs/asciidocRevealJs/")
-        append(Properties().apply {
-            "$projectDir/deck.properties"
-                .let(::File)
-                .inputStream()
-                .use(::load)
-        }[key].toString())
-    }
-
-    @Suppress("unused")
-    fun Project.pushSlides(
-        destPath: () -> String,
-        pathTo: () -> String
-    ) = pathTo()
-        .run(WorkspaceManager::createRepoDir)
-        .let { it: File ->
-            copySlideFilesToRepo(destPath(), it)
-                .takeIf { it is FileOperationResult.Success }
-                ?.run {
-                    initAddCommitToSite(it, localConf)
-                    pushSite(it, localConf)
-                    it.deleteRecursively()
-                    destPath()
-                        .let(::File)
-                        .deleteRecursively()
-                }
-        }
-
-    @Suppress("MemberVisibilityCanBePrivate")
-    fun copySlideFilesToRepo(
-        slidesDirPath: String,
-        repoDir: File
-    ): FileOperationResult = try {
-        slidesDirPath
-            .let(::File)
-            .apply {
-                when {
-                    !copyRecursively(
-                        repoDir,
-                        true
-                    ) -> throw Exception("Unable to copy slides directory to build directory")
-                }
-            }.deleteRecursively()
-        FileOperationResult.Success
-    } catch (e: Exception) {
-        FileOperationResult.Failure(e.message ?: "An error occurred during file copy.")
-    }
-}*/
