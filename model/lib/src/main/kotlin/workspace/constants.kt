@@ -150,9 +150,6 @@ object Constants {
     @JvmField
     val LOGIN_ALREADY_USED_TYPE: URI = URI.create("$PROBLEM_BASE_URL/login-already-used")
 
-
-
-
     const val PASSWORD_MIN: Int = 4
     const val PASSWORD_MAX: Int = 24
     const val IMAGE_URL_DEFAULT = "http://placehold.it/50x50"
