@@ -1,4 +1,5 @@
 pluginManagement {
+    @Suppress("unused")
     val asciidoctorGradleVersion = "4.0.0-alpha.1"
 
     repositories {
@@ -28,9 +29,9 @@ pluginManagement {
     }
 }
 
-plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
-}
+//plugins {
+//    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
+//}
 
 dependencyResolutionManagement {
     @Suppress("UnstableApiUsage")
@@ -46,7 +47,6 @@ dependencyResolutionManagement {
 rootProject.name = "workspace-engine"
 include("slides")
 //include("installer")
-//include("school-gradle-plugin")
 // Inclure le projet model comme un build composite
 //includeBuild("base") {
 //    dependencySubstitution {
