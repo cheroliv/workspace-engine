@@ -32,23 +32,12 @@ import workspace.WorkspaceUtils.sep
 plugins {
     id("org.jbake.site")
     id("org.asciidoctor.jvm.revealjs")
-    kotlin("multiplatform")
 }
 
 apply<slides.SlidesPlugin>()
 apply<school.courses.CoursesPlugin>()
 
 repositories { ruby { gems() } }
-
-kotlin {
-    js {
-        browser {
-//            fire
-        }
-        binaries.executable()
-    }
-    sourceSets.commonTest.dependencies { implementation(kotlin("test")) }
-}
 
 tasks.getByName<AsciidoctorJRevealJSTask>(TASK_ASCIIDOCTOR_REVEALJS) {
     group = GROUP_TASK_SLIDER
@@ -113,3 +102,46 @@ tasks.register<DefaultTask>(TASK_PUBLISH_SITE) {
     }
     doLast { pushSiteToGhPages(sitePushDestPath(), sitePushPathTo()) }
 }
+
+// kotlin/js config sample :
+//plugins {
+//    kotlin("multiplatform")
+//    id("org.jbake.site")
+//    id("org.asciidoctor.jvm.revealjs")
+//}
+//
+//apply<slides.SlidesPlugin>()
+//apply<school.courses.CoursesPlugin>()
+//
+//repositories { ruby { gems() } }
+//kotlin {
+//    sourceSets {
+////        val jsMain by getting {
+////            dependencies {
+////                implementation(npm("bootstrap", ">= 5.3.6"))
+////                implementation(npm("bootstrap-icons", ">= 1.13.1"))
+////            }
+////        }
+//        commonTest.dependencies {
+//            implementation(kotlin("test"))
+//        }
+//    }
+//
+//    js {
+////        moduleName = "site"
+//        compilations["main"].packageJson {
+//            customField("hello", mapOf("one" to 1, "two" to 2))
+//        }
+//        browser {
+//            distribution {
+//                outputDirectory.set(projectDir.resolve("output"))
+//            }
+//        }
+//        binaries.executable()
+//
+//    }
+//    sourceSets.commonTest.dependencies { implementation(kotlin("test")) }
+//}
+//tasks.withType<KotlinJsCompile>().configureEach {
+//    compilerOptions { target.set("es2015") }
+//}
