@@ -44,9 +44,8 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "workspace-engine"
-include("formation")
-include("teacher")
 include("slides")
+include("teacher")
 //include("installer")
 //include("school-gradle-plugin")
 // Inclure le projet model comme un build composite
