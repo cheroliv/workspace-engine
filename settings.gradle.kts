@@ -45,7 +45,7 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "workspace-engine"
-include("slides")
+include("slider")
 //include("installer")
 // Inclure le projet model comme un build composite
 //includeBuild("base") {

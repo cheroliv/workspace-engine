@@ -44,12 +44,12 @@ tasks.getByName<AsciidoctorJRevealJSTask>(TASK_ASCIIDOCTOR_REVEALJS) {
         }
     }
     val OFFICE = "office"
-    val SLIDES = "slides"
+    val SLIDER = "slider"
     val IMAGES = "images"
     revealjsOptions {
         //TODO: passer cette adresse a la configuration du slide pour indiquer sa source,
         // creer une localConf de type slides.SlidesConfiguration
-        "${System.getProperty("user.home")}${sep}workspace$sep$OFFICE$sep$SLIDES${sep}misc"
+        "${System.getProperty("user.home")}${sep}workspace$sep$OFFICE$sep$SLIDER${sep}misc"
             .let(::File)
             .apply { println("Slide source absolute path: $absolutePath") }
             .let(::setSourceDir)
