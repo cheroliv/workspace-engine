@@ -74,7 +74,7 @@ class SlidesPlugin : Plugin<Project> {
 
         project.tasks.register<Exec>("openFirefox") {
             group = "slider"
-            description = "Open the default.deck.file presentation in firefox"
+            description = "Open the presentation dashboard in firefox"
             dependsOn("asciidoctor")
             commandLine("firefox", project.deckFile("default.deck.file"))
             workingDir = project.layout.projectDirectory.asFile

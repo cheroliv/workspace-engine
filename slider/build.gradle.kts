@@ -20,13 +20,9 @@ import slides.SlidesPlugin.RevealJsSlides.TASK_DASHBOARD_SLIDES_BUILD
 import slides.SlidesPlugin.RevealJsSlides.TOC_KEY
 import workspace.WorkspaceUtils.sep
 
-plugins {
-    id("org.jbake.site")
-    id("org.asciidoctor.jvm.revealjs")
-}
+plugins { id("org.asciidoctor.jvm.revealjs") }
 
 apply<slides.SlidesPlugin>()
-apply<school.courses.CoursesPlugin>()
 
 repositories { ruby { gems() } }
 
@@ -43,19 +39,22 @@ tasks.getByName<AsciidoctorJRevealJSTask>(TASK_ASCIIDOCTOR_REVEALJS) {
             setTag("3.9.1")
         }
     }
+
     val OFFICE = "office"
-    val SLIDER = "slider"
+    val SLIDES_FOLDER = "slides"
     val IMAGES = "images"
+    val officeDir = "${System.getProperty("user.home")}${sep}workspace$sep$OFFICE"
+
     revealjsOptions {
         //TODO: passer cette adresse a la configuration du slide pour indiquer sa source,
         // creer une localConf de type slides.SlidesConfiguration
-        "${System.getProperty("user.home")}${sep}workspace$sep$OFFICE$sep$SLIDER${sep}misc"
+        "$officeDir$sep$SLIDES_FOLDER${sep}misc"
             .let(::File)
             .apply { println("Slide source absolute path: $absolutePath") }
             .let(::setSourceDir)
         baseDirFollowsSourceFile()
         resources {
-            from("$sourceDir$sep$IMAGES") {
+            from("$officeDir$sep$IMAGES") {
                 include("**")
                 into(IMAGES)
             }
