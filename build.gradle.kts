@@ -23,8 +23,8 @@ import slides.SlidesPlugin.RevealJsSlides.TASK_ASCIIDOCTOR_REVEALJS
 import slides.SlidesPlugin.RevealJsSlides.TASK_CLEAN_SLIDES_BUILD
 import slides.SlidesPlugin.RevealJsSlides.TASK_DASHBOARD_SLIDES_BUILD
 import slides.SlidesPlugin.RevealJsSlides.TOC_KEY
+import slides.SlidesPlugin.Slide.DEFAULT_SLIDES_FOLDER_PATH
 import slides.SlidesPlugin.Slide.IMAGES
-import slides.SlidesPlugin.Slide.officeDir
 import translate.TranslatorPlugin
 import workspace.WorkspaceUtils.sep
 
@@ -80,7 +80,7 @@ tasks.run {
         revealjsOptions {
             //TODO: passer cette adresse a la configuration du slide pour indiquer sa source,
             // creer une localConf de type slides.SlidesConfiguration
-            SlidesPlugin.Slide.DEFAULT_SLIDES_FOLDER_PATH
+            DEFAULT_SLIDES_FOLDER_PATH
                 .let(::File)
                 .apply { println("Slide source absolute path: $absolutePath") }
                 .let(::setSourceDir)
