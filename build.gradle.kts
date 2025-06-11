@@ -21,8 +21,9 @@ import slides.SlidesPlugin.RevealJsSlides.TOC_KEY
 import workspace.WorkspaceUtils.sep
 
 plugins {
-    this.id("org.asciidoctor.jvm.revealjs")
     idea
+    this.id("org.asciidoctor.jvm.revealjs")
+    this.id("com.github.node-gradle.node")
 }
 
 apply<school.frontend.SchoolPlugin>()
@@ -39,6 +40,12 @@ object School {
     const val VERSION_KEY = "artifact.version"
     const val SPRING_PROFILE_KEY = "spring.profiles.active"
     const val LOCAL_PROFILE = "local"
+}
+
+object Serve {
+    const val PACKAGE_NAME = "@serve"
+    const val VERSION = "14.2.4"
+    const val SERVE_DEP = "$PACKAGE_NAME@$VERSION"
 }
 
 allprojects {

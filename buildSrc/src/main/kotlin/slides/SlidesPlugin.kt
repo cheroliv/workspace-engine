@@ -43,6 +43,7 @@ class SlidesPlugin : Plugin<Project> {
         const val REVEALJS_TRANSITION_KEY = "revealjs_transition"
         const val REVEALJS_HISTORY_KEY = "revealjs_history"
         const val REVEALJS_SLIDENUMBER_KEY = "revealjs_slideNumber"
+        const val TASK_SERVE_SLIDES = "serveSlides" // <-- NOUVELLE CONSTANTE POUR LA TÂCHE
     }
 
     override fun apply(project: Project) {
