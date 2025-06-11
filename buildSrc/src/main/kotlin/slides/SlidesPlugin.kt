@@ -17,10 +17,6 @@ import workspace.WorkspaceUtils.sep
 import java.io.File
 
 
-/**
- * repos needed:
- *  - slideshowroom
- */
 class SlidesPlugin : Plugin<Project> {
     object RevealJsSlides {
         const val GROUP_TASK_SLIDER = "slider"
@@ -43,7 +39,7 @@ class SlidesPlugin : Plugin<Project> {
         const val REVEALJS_TRANSITION_KEY = "revealjs_transition"
         const val REVEALJS_HISTORY_KEY = "revealjs_history"
         const val REVEALJS_SLIDENUMBER_KEY = "revealjs_slideNumber"
-        const val TASK_SERVE_SLIDES = "serveSlides" // <-- NOUVELLE CONSTANTE POUR LA TÂCHE
+        const val TASK_SERVE_SLIDES = "serveSlides"
     }
 
     override fun apply(project: Project) {
@@ -182,11 +178,11 @@ class SlidesPlugin : Plugin<Project> {
                         .trimIndent()
                         .run(YAMLMapper()::readValue)
 
-                val repoDir = "${project.layout.buildDirectory.get().asFile}/${localConf.pushSlides?.to}"
+                val repoDir = "${project.layout.buildDirectory.get().asFile}$sep${localConf.pushSlides?.to}"
                     .run(::File)
 
                 project.pushSlides({
-                    "${project.layout.buildDirectory.get().asFile}/${localConf.srcPath}"
+                    "${project.layout.buildDirectory.get().asFile}$sep${localConf.srcPath}"
                         .run(::File).absolutePath
                 }, { repoDir.absolutePath })
             }
@@ -199,4 +195,22 @@ class SlidesPlugin : Plugin<Project> {
             workingDir = project.layout.projectDirectory.asFile
         }
     }
+
+    object Serve {
+        const val PACKAGE_NAME = "@serve"
+        const val VERSION = "14.2.4"
+        const val SERVE_DEP = "$PACKAGE_NAME@$VERSION"
+    }
+
+    object Slide {
+        const val OFFICE_FOLDER = "office"
+        const val SLIDES_FOLDER = "slides"
+        const val WORKSPACE_FOLDER = "workspace"
+        const val IMAGES = "images"
+        const val DEFAULT_SLIDES_FOLDER = "misc"
+        val officeDir: String
+            get() = "${System.getProperty("user.home")}$sep$WORKSPACE_FOLDER$sep$OFFICE_FOLDER"
+        val DEFAULT_SLIDES_FOLDER_PATH = "$officeDir$sep$SLIDES_FOLDER$sep$DEFAULT_SLIDES_FOLDER"
+    }
+
 }
