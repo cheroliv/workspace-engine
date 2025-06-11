@@ -164,9 +164,25 @@ tasks.register<Exec>("runCli") {
 
 tasks.register("pushTrainingCatalogue") {
     group = "trainings"
-    description = "Push training catalogue to remote repository"
+    description = "Push training catalogue content to remote repository"
     println("push training catalogue to remote repository")
 }
+
+tasks.register<Exec>("serveTrainingCatalogue") {
+    group = "trainings"
+    description = "Serve baked training catalogue locally."
+    commandLine("./jbake.sh")
+    //TODO: change path build over user.home property to project layout when adding gradle support to office repository
+    workingDir = "${System.getProperty("user.home")}/workspace/office/formations".run(::file)
+    doFirst { println("Serve baked training catalogue locally.") }
+}
+
+//tasks.register<Exec>("execServeSlides") {
+//    group = "serve"
+//    description = "Serve slides using the serve package executed via command line"
+//    commandLine("npx", /*"serve"*/SlidesPlugin.Serve.SERVE_DEP, "build/docs/asciidocRevealJs/")
+//    workingDir = project.layout.projectDirectory.asFile
+//}
 
 tasks.register("pushSchoolFrontend") {
     group = "trainings"
