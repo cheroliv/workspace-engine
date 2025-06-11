@@ -1,4 +1,5 @@
 import ai.AssistantPlugin
+import com.github.gradle.node.npm.task.NpxTask
 import forms.FormPlugin
 import jbake.JBakeGhPagesPlugin
 import org.asciidoctor.gradle.jvm.slides.AsciidoctorJRevealJSTask
@@ -58,127 +59,139 @@ allprojects {
     purchaseArtifact()
 }
 
-tasks.run {
-    wrapper {
-        gradleVersion = "8.14.2"
-        distributionType = Wrapper.DistributionType.BIN
-    }
-    getByName<AsciidoctorJRevealJSTask>(TASK_ASCIIDOCTOR_REVEALJS) {
-        group = GROUP_TASK_SLIDER
-        description = "Slider settings"
-        dependsOn(TASK_CLEAN_SLIDES_BUILD)
-        finalizedBy(TASK_DASHBOARD_SLIDES_BUILD)
-        revealjs {
-            version = "3.1.0"
-            templateGitHub {
-                setOrganisation("hakimel")
-                setRepository("reveal.js")
-                setTag("3.9.1")
-            }
-        }
-
-        revealjsOptions {
-            //TODO: passer cette adresse a la configuration du slide pour indiquer sa source,
-            // creer une localConf de type slides.SlidesConfiguration
-            DEFAULT_SLIDES_FOLDER_PATH
-                .let(::File)
-                .apply { println("Slide source absolute path: $absolutePath") }
-                .let(::setSourceDir)
-            baseDirFollowsSourceFile()
-            resources {
-                from("$sourceDir$sep$IMAGES") {
-                    include("**")
-                    into(IMAGES)
-                }
-            }
-            mapOf(
-                BUILD_GRADLE_KEY to layout.projectDirectory
-                    .asFile
-                    .let { "$it${sep}build.gradle.kts" }
-                    .let(::File),
-                ENDPOINT_URL_KEY to "https://github.com/pages-content/slides/",
-                SOURCE_HIGHLIGHTER_KEY to "coderay",
-                CODERAY_CSS_KEY to "style",
-                IMAGEDIR_KEY to ".${sep}images",
-                TOC_KEY to "left",
-                ICONS_KEY to "font",
-                SETANCHORS_KEY to "",
-                IDPREFIX_KEY to "slide-",
-                IDSEPARATOR_KEY to "-",
-                DOCINFO_KEY to "shared",
-                REVEALJS_THEME_KEY to "black",
-                REVEALJS_TRANSITION_KEY to "linear",
-                REVEALJS_HISTORY_KEY to "true",
-                REVEALJS_SLIDENUMBER_KEY to "true"
-            ).let(::attributes)
+tasks.wrapper {
+    gradleVersion = "8.14.2"
+    distributionType = Wrapper.DistributionType.BIN
+}
+tasks.getByName<AsciidoctorJRevealJSTask>(TASK_ASCIIDOCTOR_REVEALJS) {
+    group = GROUP_TASK_SLIDER
+    description = "Slider settings"
+    dependsOn(TASK_CLEAN_SLIDES_BUILD)
+    finalizedBy(TASK_DASHBOARD_SLIDES_BUILD)
+    revealjs {
+        version = "3.1.0"
+        templateGitHub {
+            setOrganisation("hakimel")
+            setRepository("reveal.js")
+            setTag("3.9.1")
         }
     }
 
-    withType<JavaExec> {
-        jvmArgs = listOf(
-            "--add-modules=jdk.incubator.vector",
-            "--enable-native-access=ALL-UNNAMED",
-            "--enable-preview"
-        )
+    revealjsOptions {
+        //TODO: passer cette adresse a la configuration du slide pour indiquer sa source,
+        // creer une localConf de type slides.SlidesConfiguration
+        DEFAULT_SLIDES_FOLDER_PATH
+            .let(::File)
+            .apply { println("Slide source absolute path: $absolutePath") }
+            .let(::setSourceDir)
+        baseDirFollowsSourceFile()
+        resources {
+            from("$sourceDir$sep$IMAGES") {
+                include("**")
+                into(IMAGES)
+            }
+        }
+        mapOf(
+            BUILD_GRADLE_KEY to layout.projectDirectory
+                .asFile
+                .let { "$it${sep}build.gradle.kts" }
+                .let(::File),
+            ENDPOINT_URL_KEY to "https://github.com/pages-content/slides/",
+            SOURCE_HIGHLIGHTER_KEY to "coderay",
+            CODERAY_CSS_KEY to "style",
+            IMAGEDIR_KEY to ".${sep}images",
+            TOC_KEY to "left",
+            ICONS_KEY to "font",
+            SETANCHORS_KEY to "",
+            IDPREFIX_KEY to "slide-",
+            IDSEPARATOR_KEY to "-",
+            DOCINFO_KEY to "shared",
+            REVEALJS_THEME_KEY to "black",
+            REVEALJS_TRANSITION_KEY to "linear",
+            REVEALJS_HISTORY_KEY to "true",
+            REVEALJS_SLIDENUMBER_KEY to "true"
+        ).let(::attributes)
     }
+}
 
-    register<Exec>("reportTestApi") {
-        group = "api"
-        commandLine("./gradlew", "-q", "-s", "-p", "../api", ":reportTests")
-    }
+tasks.withType<JavaExec> {
+    jvmArgs = listOf(
+        "--add-modules=jdk.incubator.vector",
+        "--enable-native-access=ALL-UNNAMED",
+        "--enable-preview"
+    )
+}
 
-    register<Exec>("testApi") {
-        group = "api"
-        commandLine("./gradlew", "-q", "-s", "-p", "../api", ":check", "--rerun-tasks")
-    }
+tasks.register<Exec>("reportTestApi") {
+    group = "api"
+    commandLine("./gradlew", "-q", "-s", "-p", "../api", ":reportTests")
+}
 
-    register<Exec>("runInstaller") {
-        group = "installer"
-        commandLine(
-            "java", "-jar",
-            "../api/installer/build/libs/installer-${project.properties["artifact.version"]}.jar"
-        )
-    }
+tasks.register<Exec>("testApi") {
+    group = "api"
+    commandLine("./gradlew", "-q", "-s", "-p", "../api", ":check", "--rerun-tasks")
+}
 
-    register<Exec>("runApi") {
-        group = "api"
-        commandLine(
-            "java", "-jar",
-            "../api/build/libs/api-${project.properties["artifact.version"]}.jar"
-        )
-    }
+tasks.register<Exec>("runInstaller") {
+    group = "installer"
+    commandLine(
+        "java", "-jar",
+        "../api/installer/build/libs/installer-${project.properties["artifact.version"]}.jar"
+    )
+}
 
-    register<Exec>("runLocalApi") {
-        group = "api"
-        commandLine(
-            "java", "-D${School.SPRING_PROFILE_KEY}=${School.LOCAL_PROFILE}",
-            "-jar", "../api/build/libs/api-${project.properties["artifact.version"]}.jar"
-        )
-    }
+tasks.register<Exec>("runApi") {
+    group = "api"
+    commandLine(
+        "java", "-jar",
+        "../api/build/libs/api-${project.properties["artifact.version"]}.jar"
+    )
+}
 
-    //TODO: Create another module in api to get cli its own archive(task jar)
-    register<Exec>("runCli") {
-        group = "api"
-        commandLine("./gradlew", "-q", "-s", "-p", "../api", ":cli")
-    }
+tasks.register<Exec>("runLocalApi") {
+    group = "api"
+    commandLine(
+        "java", "-D${School.SPRING_PROFILE_KEY}=${School.LOCAL_PROFILE}",
+        "-jar", "../api/build/libs/api-${project.properties["artifact.version"]}.jar"
+    )
+}
 
-    register("pushTrainingCatalogue") {
-        group = "trainings"
-        description = "Push training catalogue to remote repository"
-        println("push training catalogue to remote repository")
-    }
+//TODO: Create another module in api to get cli its own archive(task jar)
+tasks.register<Exec>("runCli") {
+    group = "api"
+    commandLine("./gradlew", "-q", "-s", "-p", "../api", ":cli")
+}
 
-    register("pushSchoolFrontend") {
-        group = "trainings"
-        description = "Push school frontend to remote repository"
-        println("push school frontend to remote repository")
-    }
+tasks.register("pushTrainingCatalogue") {
+    group = "trainings"
+    description = "Push training catalogue to remote repository"
+    println("push training catalogue to remote repository")
+}
 
-    register("pushSchoolBackoffice") {
-        group = "trainings"
-        description = "Push school backoffice to remote repository"
-        println("push school backoffice  to remote repository")
-    }
+tasks.register("pushSchoolFrontend") {
+    group = "trainings"
+    description = "Push school frontend to remote repository"
+    println("push school frontend to remote repository")
+}
 
-    //TODO: `serve build/docs/asciidocRevealJs/`
+tasks.register("pushSchoolBackoffice") {
+    group = "trainings"
+    description = "Push school backoffice to remote repository"
+    println("push school backoffice  to remote repository")
+}
+
+tasks.register<Exec>("execServeSlides") {
+    group = "serve"
+    description = "Serve slides using the serve package executed via command line"
+    commandLine("npx", /*"serve"*/SlidesPlugin.Serve.SERVE_DEP, "build/docs/asciidocRevealJs/")
+    workingDir = project.layout.projectDirectory.asFile
+}
+
+project.tasks.register<NpxTask>("serveSlides") {
+    group = "serve"
+    description = "Serve slides using the serve package executed via npx"
+    command = SlidesPlugin.Serve.SERVE_DEP
+    args = listOf("build/docs/asciidocRevealJs/")
+    workingDir = project.layout.projectDirectory.asFile
+    doFirst { println("Serve slides using the serve package executed via npx") }
 }

@@ -197,7 +197,7 @@ class SlidesPlugin : Plugin<Project> {
     }
 
     object Serve {
-        const val PACKAGE_NAME = "@serve"
+        const val PACKAGE_NAME = "serve"
         const val VERSION = "14.2.4"
         const val SERVE_DEP = "$PACKAGE_NAME@$VERSION"
     }
