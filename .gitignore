@@ -55,3 +55,15 @@ desktop.ini
 workspace-engine
 
 kotlin-js-store
+
+
+.env
+slides-context.yml
+gradle-home.properties
+private
+bootstrap-3.3.7.zip
+static-site-jbake
+.vscode
+node_modules
+navigator.zip
+
