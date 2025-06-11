@@ -23,6 +23,8 @@ import slides.SlidesPlugin.RevealJsSlides.TASK_ASCIIDOCTOR_REVEALJS
 import slides.SlidesPlugin.RevealJsSlides.TASK_CLEAN_SLIDES_BUILD
 import slides.SlidesPlugin.RevealJsSlides.TASK_DASHBOARD_SLIDES_BUILD
 import slides.SlidesPlugin.RevealJsSlides.TOC_KEY
+import slides.SlidesPlugin.Slide.IMAGES
+import slides.SlidesPlugin.Slide.officeDir
 import translate.TranslatorPlugin
 import workspace.WorkspaceUtils.sep
 
@@ -46,23 +48,6 @@ object School {
     const val VERSION_KEY = "artifact.version"
     const val SPRING_PROFILE_KEY = "spring.profiles.active"
     const val LOCAL_PROFILE = "local"
-}
-
-object Serve {
-    const val PACKAGE_NAME = "@serve"
-    const val VERSION = "14.2.4"
-    const val SERVE_DEP = "$PACKAGE_NAME@$VERSION"
-}
-
-object Slide {
-    const val OFFICE_FOLDER = "office"
-    const val SLIDES_FOLDER = "slides"
-    const val WORKSPACE_FOLDER = "workspace"
-    const val IMAGES = "images"
-    const val DEFAULT_SLIDES_FOLDER = "misc"
-    val officeDir: String
-        get() = "${System.getProperty("user.home")}$sep$WORKSPACE_FOLDER$sep$OFFICE_FOLDER"
-    val DEFAULT_SLIDES_FOLDER_PATH = "$officeDir$sep$SLIDES_FOLDER$sep$DEFAULT_SLIDES_FOLDER"
 }
 
 allprojects {
@@ -95,15 +80,15 @@ tasks.run {
         revealjsOptions {
             //TODO: passer cette adresse a la configuration du slide pour indiquer sa source,
             // creer une localConf de type slides.SlidesConfiguration
-            Slide.DEFAULT_SLIDES_FOLDER_PATH
+            SlidesPlugin.Slide.DEFAULT_SLIDES_FOLDER_PATH
                 .let(::File)
                 .apply { println("Slide source absolute path: $absolutePath") }
                 .let(::setSourceDir)
             baseDirFollowsSourceFile()
             resources {
-                from("${Slide.officeDir}$sep${Slide.IMAGES}") {
+                from("$sourceDir$sep$IMAGES") {
                     include("**")
-                    into(Slide.IMAGES)
+                    into(IMAGES)
                 }
             }
             mapOf(
