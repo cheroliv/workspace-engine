@@ -1,4 +1,9 @@
+import ai.AssistantPlugin
+import forms.FormPlugin
+import jbake.JBakeGhPagesPlugin
 import org.asciidoctor.gradle.jvm.slides.AsciidoctorJRevealJSTask
+import school.frontend.SchoolPlugin
+import slides.SlidesPlugin
 import slides.SlidesPlugin.RevealJsSlides.BUILD_GRADLE_KEY
 import slides.SlidesPlugin.RevealJsSlides.CODERAY_CSS_KEY
 import slides.SlidesPlugin.RevealJsSlides.DOCINFO_KEY
@@ -18,6 +23,7 @@ import slides.SlidesPlugin.RevealJsSlides.TASK_ASCIIDOCTOR_REVEALJS
 import slides.SlidesPlugin.RevealJsSlides.TASK_CLEAN_SLIDES_BUILD
 import slides.SlidesPlugin.RevealJsSlides.TASK_DASHBOARD_SLIDES_BUILD
 import slides.SlidesPlugin.RevealJsSlides.TOC_KEY
+import translate.TranslatorPlugin
 import workspace.WorkspaceUtils.sep
 
 plugins {
@@ -26,12 +32,12 @@ plugins {
     this.id("com.github.node-gradle.node")
 }
 
-apply<school.frontend.SchoolPlugin>()
-apply<forms.FormPlugin>()
-apply<jbake.JBakeGhPagesPlugin>()
-apply<ai.AssistantPlugin>()
-apply<translate.TranslatorPlugin>()
-apply<slides.SlidesPlugin>()
+apply<SchoolPlugin>()
+apply<FormPlugin>()
+apply<JBakeGhPagesPlugin>()
+apply<AssistantPlugin>()
+apply<TranslatorPlugin>()
+apply<SlidesPlugin>()
 
 repositories { ruby { gems() } }
 
@@ -46,6 +52,17 @@ object Serve {
     const val PACKAGE_NAME = "@serve"
     const val VERSION = "14.2.4"
     const val SERVE_DEP = "$PACKAGE_NAME@$VERSION"
+}
+
+object Slide {
+    const val OFFICE_FOLDER = "office"
+    const val SLIDES_FOLDER = "slides"
+    const val WORKSPACE_FOLDER = "workspace"
+    const val IMAGES = "images"
+    const val DEFAULT_SLIDES_FOLDER = "misc"
+    val officeDir: String
+        get() = "${System.getProperty("user.home")}$sep$WORKSPACE_FOLDER$sep$OFFICE_FOLDER"
+    val DEFAULT_SLIDES_FOLDER_PATH = "$officeDir$sep$SLIDES_FOLDER$sep$DEFAULT_SLIDES_FOLDER"
 }
 
 allprojects {
@@ -75,23 +92,18 @@ tasks.run {
             }
         }
 
-        val OFFICE = "office"
-        val SLIDES_FOLDER = "slides"
-        val IMAGES = "images"
-        val officeDir = "${System.getProperty("user.home")}${sep}workspace$sep$OFFICE"
-
         revealjsOptions {
             //TODO: passer cette adresse a la configuration du slide pour indiquer sa source,
             // creer une localConf de type slides.SlidesConfiguration
-            "$officeDir$sep$SLIDES_FOLDER${sep}misc"
+            Slide.DEFAULT_SLIDES_FOLDER_PATH
                 .let(::File)
                 .apply { println("Slide source absolute path: $absolutePath") }
                 .let(::setSourceDir)
             baseDirFollowsSourceFile()
             resources {
-                from("$officeDir$sep$IMAGES") {
+                from("${Slide.officeDir}$sep${Slide.IMAGES}") {
                     include("**")
-                    into(IMAGES)
+                    into(Slide.IMAGES)
                 }
             }
             mapOf(
@@ -182,4 +194,6 @@ tasks.run {
         description = "Push school backoffice to remote repository"
         println("push school backoffice  to remote repository")
     }
+
+    //TODO: `serve build/docs/asciidocRevealJs/`
 }
