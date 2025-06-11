@@ -69,10 +69,28 @@ tasks.run {
             "-jar", "../api/build/libs/api-${project.properties["artifact.version"]}.jar"
         )
     }
-}
 
-//TODO: Create another module in api to get cli its own archive(task jar)
-tasks.register<Exec>("runCli") {
-    group = "api"
-    commandLine("./gradlew", "-q", "-s", "-p", "../api", ":cli")
+    //TODO: Create another module in api to get cli its own archive(task jar)
+    register<Exec>("runCli") {
+        group = "api"
+        commandLine("./gradlew", "-q", "-s", "-p", "../api", ":cli")
+    }
+
+    register("pushTrainingCatalogue") {
+        group = "trainings"
+        description = "Push training catalogue to remote repository"
+        println("push training catalogue to remote repository")
+    }
+
+    register("pushSchoolFrontend") {
+        group = "trainings"
+        description = "Push school frontend to remote repository"
+        println("push school frontend to remote repository")
+    }
+
+    register("pushSchoolBackoffice") {
+        group = "trainings"
+        description = "Push school backoffice to remote repository"
+        println("push school backoffice  to remote repository")
+    }
 }
