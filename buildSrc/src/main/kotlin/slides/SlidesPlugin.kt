@@ -19,7 +19,6 @@ import slides.SlidesPlugin.RevealJsSlides.TASK_DASHBOARD_SLIDES_BUILD
 import workspace.WorkspaceUtils.sep
 import java.io.File
 
-
 class SlidesPlugin : Plugin<Project> {
     object RevealJsSlides {
         const val GROUP_TASK_SLIDER = "slider"
@@ -49,6 +48,7 @@ class SlidesPlugin : Plugin<Project> {
         project.repositories {
             mavenCentral()
             gradlePluginPortal()
+//            (this as ExtensionAware).the<RepositoryHandlerExtension>().gems()
         }
 
         project.tasks.register<AsciidoctorTask>("asciidoctor") {
