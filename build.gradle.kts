@@ -51,13 +51,13 @@ object School {
     const val LOCAL_PROFILE = "local"
 }
 
-allprojects {
-    fun Project.purchaseArtifact() = (School.GROUP_KEY to School.VERSION_KEY).run {
-        group = properties[first].toString()
-        version = properties[second].toString()
-    }
-    purchaseArtifact()
+fun Project.purchaseArtifact() = (School.GROUP_KEY to School.VERSION_KEY).run {
+    group = properties[first].toString()
+    version = properties[second].toString()
 }
+
+purchaseArtifact()
+
 
 project.tasks.wrapper {
     gradleVersion = "8.14.2"
@@ -200,6 +200,7 @@ project.tasks.register<Exec>("execServeSlides") {
 project.tasks.register<NpxTask>("serveSlides") {
     group = "serve"
     description = "Serve slides using the serve package executed via npx"
+    dependsOn(TASK_ASCIIDOCTOR_REVEALJS)
     command = SlidesPlugin.Serve.SERVE_DEP
     args = listOf("build/docs/asciidocRevealJs/")
     workingDir = project.layout.projectDirectory.asFile
