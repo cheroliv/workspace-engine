@@ -2,6 +2,7 @@ package slides
 
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.github.gradle.node.npm.task.NpxTask
 import org.asciidoctor.gradle.jvm.AsciidoctorTask
 import org.gradle.api.DefaultTask
 import org.gradle.api.Plugin
@@ -12,6 +13,8 @@ import org.gradle.kotlin.dsl.repositories
 import slides.SlidesManager.CONFIG_PATH_KEY
 import slides.SlidesManager.deckFile
 import slides.SlidesManager.pushSlides
+import slides.SlidesPlugin.RevealJsSlides.GROUP_TASK_SLIDER
+import slides.SlidesPlugin.RevealJsSlides.TASK_ASCIIDOCTOR_REVEALJS
 import slides.SlidesPlugin.RevealJsSlides.TASK_DASHBOARD_SLIDES_BUILD
 import workspace.WorkspaceUtils.sep
 import java.io.File
@@ -49,12 +52,12 @@ class SlidesPlugin : Plugin<Project> {
         }
 
         project.tasks.register<AsciidoctorTask>("asciidoctor") {
-            group = "slider"
+            group = GROUP_TASK_SLIDER
             dependsOn(project.tasks.findByPath("asciidoctorRevealJs"))
         }
 
         project.tasks.register<DefaultTask>("cleanSlidesBuild") {
-            group = "slider"
+            group = GROUP_TASK_SLIDER
             description = "Delete generated presentation in build directory."
             doFirst {
                 "${project.layout.buildDirectory}/docs/asciidocRevealJs".run {
@@ -70,7 +73,7 @@ class SlidesPlugin : Plugin<Project> {
         }
 
         project.tasks.register<Exec>("openFirefox") {
-            group = "slider"
+            group = GROUP_TASK_SLIDER
             description = "Open the presentation dashboard in firefox"
             dependsOn("asciidoctor")
             commandLine("firefox", project.deckFile("default.deck.file"))
@@ -78,7 +81,7 @@ class SlidesPlugin : Plugin<Project> {
         }
 
         project.tasks.register<Exec>("openChromium") {
-            group = "slider"
+            group = GROUP_TASK_SLIDER
             description = "Open the default.deck.file presentation in chromium"
             dependsOn("asciidoctor")
             commandLine("chromium", project.deckFile("default.deck.file"))
@@ -166,7 +169,7 @@ class SlidesPlugin : Plugin<Project> {
         }
 
         project.tasks.register<DefaultTask>(RevealJsSlides.TASK_PUBLISH_SLIDES) {
-            group = "slider"
+            group = GROUP_TASK_SLIDER
             description = "Deploy sliders to remote repository"
             dependsOn("asciidoctor")
             doFirst { "Task description :\n\t$description".run(project.logger::info) }
@@ -193,6 +196,24 @@ class SlidesPlugin : Plugin<Project> {
             dependsOn("asciidoctor")
             commandLine("chromium", project.deckFile("asciidoc.capsule.deck.file"))
             workingDir = project.layout.projectDirectory.asFile
+        }
+
+
+        project.tasks.register<Exec>("execServeSlides") {
+            group = GROUP_TASK_SLIDER
+            description = "Serve slides using the serve package executed via command line"
+            commandLine("npx", Serve.SERVE_DEP, "build/docs/asciidocRevealJs/")
+            workingDir = project.layout.projectDirectory.asFile
+        }
+
+        project.tasks.register<NpxTask>("serveSlides") {
+            group = GROUP_TASK_SLIDER
+            description = "Serve slides using the serve package executed via npx"
+            dependsOn(TASK_ASCIIDOCTOR_REVEALJS)
+            command.set(Serve.SERVE_DEP)
+            args.set(listOf("build/docs/asciidocRevealJs/"))
+            workingDir.set(project.layout.projectDirectory.asFile)
+            doFirst { println("Serve slides using the serve package executed via npx") }
         }
     }
 

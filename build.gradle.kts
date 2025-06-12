@@ -1,5 +1,5 @@
-import com.github.gradle.node.npm.task.NpxTask
 import org.asciidoctor.gradle.jvm.slides.AsciidoctorJRevealJSTask
+import school.training.content.TrainingContentPlugin
 import slides.SlidesPlugin.RevealJsSlides.BUILD_GRADLE_KEY
 import slides.SlidesPlugin.RevealJsSlides.CODERAY_CSS_KEY
 import slides.SlidesPlugin.RevealJsSlides.DOCINFO_KEY
@@ -37,6 +37,7 @@ apply<translate.TranslatorPlugin>()
 apply<slides.SlidesPlugin>()
 apply<api.ApiPlugin>()
 apply<workspace.WorkspacePlugin>()
+apply<TrainingContentPlugin>()
 
 repositories { ruby { gems() } }
 
@@ -89,48 +90,4 @@ project.tasks.getByName<AsciidoctorJRevealJSTask>(TASK_ASCIIDOCTOR_REVEALJS) {
             REVEALJS_SLIDENUMBER_KEY to "true"
         ).let(::attributes)
     }
-}
-
-project.tasks.register("pushTrainingCatalogue") {
-    group = "trainings"
-    description = "Push training catalogue content to remote repository"
-    println("push training catalogue to remote repository")
-}
-
-project.tasks.register<Exec>("serveTrainingCatalogue") {
-    group = "trainings"
-    description = "Serve baked training catalogue locally."
-    commandLine("./jbake.sh")
-    //TODO: change path build over user.home property to project layout when adding gradle support to office repository
-    workingDir = "${System.getProperty("user.home")}/workspace/office/formations".run(::file)
-    doFirst { println("Serve baked training catalogue locally.") }
-}
-
-project.tasks.register("pushSchoolFrontend") {
-    group = "trainings"
-    description = "Push school frontend to remote repository"
-    println("push school frontend to remote repository")
-}
-
-project.tasks.register("pushSchoolBackoffice") {
-    group = "trainings"
-    description = "Push school backoffice to remote repository"
-    println("push school backoffice  to remote repository")
-}
-
-project.tasks.register<Exec>("execServeSlides") {
-    group = "serve"
-    description = "Serve slides using the serve package executed via command line"
-    commandLine("npx", slides.SlidesPlugin.Serve.SERVE_DEP, "build/docs/asciidocRevealJs/")
-    workingDir = project.layout.projectDirectory.asFile
-}
-
-project.tasks.register<NpxTask>("serveSlides") {
-    group = "serve"
-    description = "Serve slides using the serve package executed via npx"
-    dependsOn(TASK_ASCIIDOCTOR_REVEALJS)
-    command = slides.SlidesPlugin.Serve.SERVE_DEP
-    args = listOf("build/docs/asciidocRevealJs/")
-    workingDir = project.layout.projectDirectory.asFile
-    doFirst { println("Serve slides using the serve package executed via npx") }
 }
