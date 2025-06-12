@@ -33,7 +33,6 @@ val Project.versions: Map<String, String>
 
 dependencies {
     setOf(
-//        files("../model/lib/build/libs/lib.jar".run(::File).path),
         "com.avast.gradle:gradle-docker-compose-plugin:0.17.6",
         "com.github.node-gradle:gradle-node-plugin:7.0.1",
         "jakarta.xml.bind:jakarta.xml.bind-api:4.0.2",
@@ -77,7 +76,6 @@ dependencies {
     runtimeOnly("com.sun.xml.bind:jaxb-impl:4.0.5")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-//    implementation("org.jetbrains.kotlin.multiplatform:org.jetbrains.kotlin.multiplatform.gradle.plugin:1.9.20")    implementation("org.jetbrains.kotlin.multiplatform:org.jetbrains.kotlin.multiplatform.gradle.plugin:1.9.20")
 }
 
 val functionalTestSourceSet: SourceSet = sourceSets.create("functionalTest")
