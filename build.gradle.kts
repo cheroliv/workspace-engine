@@ -1,10 +1,5 @@
-import ai.AssistantPlugin
 import com.github.gradle.node.npm.task.NpxTask
-import forms.FormPlugin
-import jbake.JBakeGhPagesPlugin
 import org.asciidoctor.gradle.jvm.slides.AsciidoctorJRevealJSTask
-import school.frontend.SchoolPlugin
-import slides.SlidesPlugin
 import slides.SlidesPlugin.RevealJsSlides.BUILD_GRADLE_KEY
 import slides.SlidesPlugin.RevealJsSlides.CODERAY_CSS_KEY
 import slides.SlidesPlugin.RevealJsSlides.DOCINFO_KEY
@@ -26,7 +21,6 @@ import slides.SlidesPlugin.RevealJsSlides.TASK_DASHBOARD_SLIDES_BUILD
 import slides.SlidesPlugin.RevealJsSlides.TOC_KEY
 import slides.SlidesPlugin.Slide.DEFAULT_SLIDES_FOLDER_PATH
 import slides.SlidesPlugin.Slide.IMAGES
-import translate.TranslatorPlugin
 import workspace.WorkspaceUtils.sep
 
 plugins {
@@ -35,34 +29,16 @@ plugins {
     this.id("com.github.node-gradle.node")
 }
 
-apply<SchoolPlugin>()
-apply<FormPlugin>()
-apply<JBakeGhPagesPlugin>()
-apply<AssistantPlugin>()
-apply<TranslatorPlugin>()
-apply<SlidesPlugin>()
+apply<school.frontend.SchoolPlugin>()
+apply<forms.FormPlugin>()
+apply<jbake.JBakeGhPagesPlugin>()
+apply<ai.AssistantPlugin>()
+apply<translate.TranslatorPlugin>()
+apply<slides.SlidesPlugin>()
+apply<api.ApiPlugin>()
+apply<workspace.WorkspacePlugin>()
 
 repositories { ruby { gems() } }
-
-object School {
-    const val GROUP_KEY = "artifact.group"
-    const val VERSION_KEY = "artifact.version"
-    const val SPRING_PROFILE_KEY = "spring.profiles.active"
-    const val LOCAL_PROFILE = "local"
-}
-
-fun Project.purchaseArtifact() = (School.GROUP_KEY to School.VERSION_KEY).run {
-    group = properties[first].toString()
-    version = properties[second].toString()
-}
-
-purchaseArtifact()
-
-
-project.tasks.wrapper {
-    gradleVersion = "8.14.2"
-    distributionType = Wrapper.DistributionType.BIN
-}
 
 project.tasks.getByName<AsciidoctorJRevealJSTask>(TASK_ASCIIDOCTOR_REVEALJS) {
     group = GROUP_TASK_SLIDER
@@ -115,53 +91,6 @@ project.tasks.getByName<AsciidoctorJRevealJSTask>(TASK_ASCIIDOCTOR_REVEALJS) {
     }
 }
 
-project.tasks.withType<JavaExec> {
-    jvmArgs = listOf(
-        "--add-modules=jdk.incubator.vector",
-        "--enable-native-access=ALL-UNNAMED",
-        "--enable-preview"
-    )
-}
-
-project.tasks.register<Exec>("reportTestApi") {
-    group = "api"
-    commandLine("./gradlew", "-q", "-s", "-p", "../api", ":reportTests")
-}
-
-project.tasks.register<Exec>("testApi") {
-    group = "api"
-    commandLine("./gradlew", "-q", "-s", "-p", "../api", ":check", "--rerun-tasks")
-}
-
-project.tasks.register<Exec>("runInstaller") {
-    group = "installer"
-    commandLine(
-        "java", "-jar",
-        "../api/installer/build/libs/installer-${project.properties["artifact.version"]}.jar"
-    )
-}
-
-project.tasks.register<Exec>("runApi") {
-    group = "api"
-    commandLine(
-        "java", "-jar",
-        "../api/build/libs/api-${project.properties["artifact.version"]}.jar"
-    )
-}
-
-project.tasks.register<Exec>("runLocalApi") {
-    group = "api"
-    commandLine(
-        "java", "-D${School.SPRING_PROFILE_KEY}=${School.LOCAL_PROFILE}",
-        "-jar", "../api/build/libs/api-${project.properties["artifact.version"]}.jar"
-    )
-}
-
-//TODO: Create another module in api to get cli its own archive(task jar)
-project.tasks.register<Exec>("runCli") {
-    group = "api"
-    commandLine("./gradlew", "-q", "-s", "-p", "../api", ":cli")
-}
 
 project.tasks.register("pushTrainingCatalogue") {
     group = "trainings"
@@ -193,7 +122,7 @@ project.tasks.register("pushSchoolBackoffice") {
 project.tasks.register<Exec>("execServeSlides") {
     group = "serve"
     description = "Serve slides using the serve package executed via command line"
-    commandLine("npx", /*"serve"*/SlidesPlugin.Serve.SERVE_DEP, "build/docs/asciidocRevealJs/")
+    commandLine("npx", slides.SlidesPlugin.Serve.SERVE_DEP, "build/docs/asciidocRevealJs/")
     workingDir = project.layout.projectDirectory.asFile
 }
 
@@ -201,7 +130,7 @@ project.tasks.register<NpxTask>("serveSlides") {
     group = "serve"
     description = "Serve slides using the serve package executed via npx"
     dependsOn(TASK_ASCIIDOCTOR_REVEALJS)
-    command = SlidesPlugin.Serve.SERVE_DEP
+    command = slides.SlidesPlugin.Serve.SERVE_DEP
     args = listOf("build/docs/asciidocRevealJs/")
     workingDir = project.layout.projectDirectory.asFile
     doFirst { println("Serve slides using the serve package executed via npx") }

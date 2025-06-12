@@ -9,6 +9,9 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import org.gradle.api.Project
 import org.gradle.process.BaseExecSpec
+import workspace.WorkspacePlugin.School
+import workspace.WorkspacePlugin.School.GROUP_KEY
+import workspace.WorkspacePlugin.School.VERSION_KEY
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.OutputStream
@@ -37,10 +40,11 @@ object WorkspaceUtils {
 //        }::get).toString()
 
 
-    fun Project.purchaseArtifact() = ("artifact.group" to "artifact.version").run {
+    fun Project.purchaseArtifact() = (GROUP_KEY to VERSION_KEY).run {
         group = properties[first].toString()
         version = properties[second].toString()
     }
+
 
     fun constructTaskName(
         it: Map<Pair<String, String>, String>
