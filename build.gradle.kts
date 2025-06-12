@@ -91,7 +91,6 @@ project.tasks.getByName<AsciidoctorJRevealJSTask>(TASK_ASCIIDOCTOR_REVEALJS) {
     }
 }
 
-
 project.tasks.register("pushTrainingCatalogue") {
     group = "trainings"
     description = "Push training catalogue content to remote repository"
