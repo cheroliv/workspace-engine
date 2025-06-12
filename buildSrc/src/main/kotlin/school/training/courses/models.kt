@@ -1,4 +1,4 @@
-package school.courses
+package school.training.courses
 
 @JvmRecord
 data class DirectoryStructure(

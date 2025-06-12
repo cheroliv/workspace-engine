@@ -1,4 +1,4 @@
-package school.courses
+package school.training.courses
 
 object Courses {
     const val JSON_FILE = "patron-formation.json"

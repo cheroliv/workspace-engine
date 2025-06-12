@@ -1,4 +1,4 @@
-package school.courses
+package school.training.courses
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.gradle.api.DefaultTask
