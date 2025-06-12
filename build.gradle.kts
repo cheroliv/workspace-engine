@@ -59,11 +59,12 @@ allprojects {
     purchaseArtifact()
 }
 
-tasks.wrapper {
+project.tasks.wrapper {
     gradleVersion = "8.14.2"
     distributionType = Wrapper.DistributionType.BIN
 }
-tasks.getByName<AsciidoctorJRevealJSTask>(TASK_ASCIIDOCTOR_REVEALJS) {
+
+project.tasks.getByName<AsciidoctorJRevealJSTask>(TASK_ASCIIDOCTOR_REVEALJS) {
     group = GROUP_TASK_SLIDER
     description = "Slider settings"
     dependsOn(TASK_CLEAN_SLIDES_BUILD)
@@ -114,7 +115,7 @@ tasks.getByName<AsciidoctorJRevealJSTask>(TASK_ASCIIDOCTOR_REVEALJS) {
     }
 }
 
-tasks.withType<JavaExec> {
+project.tasks.withType<JavaExec> {
     jvmArgs = listOf(
         "--add-modules=jdk.incubator.vector",
         "--enable-native-access=ALL-UNNAMED",
@@ -122,17 +123,17 @@ tasks.withType<JavaExec> {
     )
 }
 
-tasks.register<Exec>("reportTestApi") {
+project.tasks.register<Exec>("reportTestApi") {
     group = "api"
     commandLine("./gradlew", "-q", "-s", "-p", "../api", ":reportTests")
 }
 
-tasks.register<Exec>("testApi") {
+project.tasks.register<Exec>("testApi") {
     group = "api"
     commandLine("./gradlew", "-q", "-s", "-p", "../api", ":check", "--rerun-tasks")
 }
 
-tasks.register<Exec>("runInstaller") {
+project.tasks.register<Exec>("runInstaller") {
     group = "installer"
     commandLine(
         "java", "-jar",
@@ -140,7 +141,7 @@ tasks.register<Exec>("runInstaller") {
     )
 }
 
-tasks.register<Exec>("runApi") {
+project.tasks.register<Exec>("runApi") {
     group = "api"
     commandLine(
         "java", "-jar",
@@ -148,7 +149,7 @@ tasks.register<Exec>("runApi") {
     )
 }
 
-tasks.register<Exec>("runLocalApi") {
+project.tasks.register<Exec>("runLocalApi") {
     group = "api"
     commandLine(
         "java", "-D${School.SPRING_PROFILE_KEY}=${School.LOCAL_PROFILE}",
@@ -157,18 +158,18 @@ tasks.register<Exec>("runLocalApi") {
 }
 
 //TODO: Create another module in api to get cli its own archive(task jar)
-tasks.register<Exec>("runCli") {
+project.tasks.register<Exec>("runCli") {
     group = "api"
     commandLine("./gradlew", "-q", "-s", "-p", "../api", ":cli")
 }
 
-tasks.register("pushTrainingCatalogue") {
+project.tasks.register("pushTrainingCatalogue") {
     group = "trainings"
     description = "Push training catalogue content to remote repository"
     println("push training catalogue to remote repository")
 }
 
-tasks.register<Exec>("serveTrainingCatalogue") {
+project.tasks.register<Exec>("serveTrainingCatalogue") {
     group = "trainings"
     description = "Serve baked training catalogue locally."
     commandLine("./jbake.sh")
@@ -177,26 +178,19 @@ tasks.register<Exec>("serveTrainingCatalogue") {
     doFirst { println("Serve baked training catalogue locally.") }
 }
 
-//tasks.register<Exec>("execServeSlides") {
-//    group = "serve"
-//    description = "Serve slides using the serve package executed via command line"
-//    commandLine("npx", /*"serve"*/SlidesPlugin.Serve.SERVE_DEP, "build/docs/asciidocRevealJs/")
-//    workingDir = project.layout.projectDirectory.asFile
-//}
-
-tasks.register("pushSchoolFrontend") {
+project.tasks.register("pushSchoolFrontend") {
     group = "trainings"
     description = "Push school frontend to remote repository"
     println("push school frontend to remote repository")
 }
 
-tasks.register("pushSchoolBackoffice") {
+project.tasks.register("pushSchoolBackoffice") {
     group = "trainings"
     description = "Push school backoffice to remote repository"
     println("push school backoffice  to remote repository")
 }
 
-tasks.register<Exec>("execServeSlides") {
+project.tasks.register<Exec>("execServeSlides") {
     group = "serve"
     description = "Serve slides using the serve package executed via command line"
     commandLine("npx", /*"serve"*/SlidesPlugin.Serve.SERVE_DEP, "build/docs/asciidocRevealJs/")
