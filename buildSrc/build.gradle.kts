@@ -6,7 +6,7 @@ repositories {
     gradlePluginPortal()
     setOf(
         "https://repo.gradle.org/gradle/libs-releases/",
-//        "https://plugins.gradle.org/m2/",
+        "https://plugins.gradle.org/m2/",
         "https://maven.xillio.com/artifactory/libs-release/",
         "https://mvnrepository.com/repos/springio-plugins-release",
         "https://archiva-repository.apache.org/archiva/repository/public/"
@@ -14,10 +14,13 @@ repositories {
 }
 
 object Constants {
-    const val langchain4jVersion = "1.0.0-beta1"//"0.36.2"
+//    const val langchain4jVersion = "1.0.1"
+//    const val langchain4ExtensionVersion = "1.0.1-beta6"
+    const val langchain4jVersion = "1.0.0-beta1"
+    const val langchain4ExtensionVersion = "1.0.0-beta1"
     const val asciidoctorGradleVersion = "4.0.0-alpha.1"
-    //    const val asciidoctorGradleVersion = "4.0.4"
-    const val jacksonVersion = "2.17.2"//2.18.0
+//        const val asciidoctorGradleVersion = "4.0.4"
+    const val jacksonVersion = "2.17.2"
     const val arrowKtVersion = "1.2.4"
     const val jgitVersion = "6.10.0.202406032230-r"
 }
@@ -57,11 +60,11 @@ dependencies {
 //        "commons-io:commons-io:$commonsIoVersion",
 //        "org.tukaani:xz:1.9",
         "dev.langchain4j:langchain4j:${Constants.langchain4jVersion}",
-        "dev.langchain4j:langchain4j-ollama:${Constants.langchain4jVersion}",
-        "dev.langchain4j:langchain4j-hugging-face:${Constants.langchain4jVersion}",
-        "dev.langchain4j:langchain4j-google-ai-gemini:${Constants.langchain4jVersion}",
-        "dev.langchain4j:langchain4j-mistral-ai:${Constants.langchain4jVersion}",
-        "dev.langchain4j:langchain4j-pgvector:${Constants.langchain4jVersion}",
+        "dev.langchain4j:langchain4j-ollama:${Constants.langchain4ExtensionVersion}",
+        "dev.langchain4j:langchain4j-hugging-face:${Constants.langchain4ExtensionVersion}",
+        "dev.langchain4j:langchain4j-google-ai-gemini:${Constants.langchain4ExtensionVersion}",
+        "dev.langchain4j:langchain4j-mistral-ai:${Constants.langchain4ExtensionVersion}",
+        "dev.langchain4j:langchain4j-pgvector:${Constants.langchain4ExtensionVersion}",
 //        "org.testcontainers:testcontainers:$testcontainersVersion",
 //        "org.testcontainers:ollama:$testcontainersVersion",
     ).forEach(::implementation)
