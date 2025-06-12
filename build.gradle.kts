@@ -1,5 +1,6 @@
 import org.asciidoctor.gradle.jvm.slides.AsciidoctorJRevealJSTask
 import school.training.content.TrainingContentPlugin
+import school.training.courses.CoursesPlugin
 import slides.SlidesPlugin.RevealJsSlides.BUILD_GRADLE_KEY
 import slides.SlidesPlugin.RevealJsSlides.CODERAY_CSS_KEY
 import slides.SlidesPlugin.RevealJsSlides.DOCINFO_KEY
@@ -38,6 +39,7 @@ apply<slides.SlidesPlugin>()
 apply<api.ApiPlugin>()
 apply<workspace.WorkspacePlugin>()
 apply<TrainingContentPlugin>()
+apply<CoursesPlugin>()
 
 repositories { ruby { gems() } }
 

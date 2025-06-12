@@ -6,14 +6,12 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.register
 import workspace.WorkspaceUtils.yamlMapper
-import school.courses.Courses.JSON_FILE
-import school.courses.Courses.ROOT_NODE
 import java.io.File
 
 class CoursesPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         project.tasks.register<DefaultTask>("schoolProcess") {
-            group = "school"
+            group = "school-courses"
             description = "Processes used in school."
             val text = """
 La formation de pré-professionalisation "Concepteur Développeur d’Applications" est conçue pour préparer les futurs professionnels du développement logiciel en leur offrant une maîtrise complète des outils et techniques essentiels. Ce programme s'articule autour de plusieurs modules clés, chacun visant à développer des compétences spécifiques et nécessaires pour exceller dans le domaine.
@@ -36,7 +34,7 @@ En résumé, cette formation offre une préparation complète pour ceux qui aspi
         }
 
         project.tasks.register<DefaultTask>("createPatronFormation") {
-            group = "school"
+            group = "school-courses"
             description = "Create patron formation in build folder."
             doLast {
                 // Fonction récursive pour créer l'arborescence
@@ -65,10 +63,10 @@ En résumé, cette formation offre une préparation complète pour ceux qui aspi
 
 // Démarrer la création de l'arborescence depuis le dossier de formation
                 project.yamlMapper.readValue<Map<String, DirectoryStructure>>(
-                    "${project.layout.projectDirectory}/$JSON_FILE".let(::File)
-                )[ROOT_NODE].let(
+                    "${project.layout.projectDirectory}/${Courses.JSON_FILE}".let(::File)
+                )[Courses.ROOT_NODE].let(
                     File(
-                        project.layout.buildDirectory.get().asFile, ROOT_NODE
+                        project.layout.buildDirectory.get().asFile, Courses.ROOT_NODE
                     ).apply {
                         when {
                             !exists() -> mkdirs()
