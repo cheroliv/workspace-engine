@@ -13,7 +13,7 @@ import org.gradle.api.Project
 class DatabasePlugin : Plugin<Project> {
     override fun apply(project: Project) {
 
-        project.task("startProjectManager") {
+        project.tasks.register("startProjectManager") {
             group = "Project"
             description = "Start Project Manager."
             doFirst { println(":startProjectManager:doFirst : ") }

@@ -7,7 +7,7 @@ import org.gradle.api.Project
 class AssistantPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
-        project.task("displayE3POPrompt") {
+        project.tasks.register("displayE3POPrompt") {
             group = "school-ai"
             description = "Dislpay on console AI prompt assistant"
             doFirst { AssistantManager.PromptManager.userMessageFr.let(::println) }

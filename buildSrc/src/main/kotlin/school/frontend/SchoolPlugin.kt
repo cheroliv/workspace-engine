@@ -3,6 +3,12 @@ package school.frontend
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.compile.JavaCompile
+import school.frontend.SchoolOpsManager.fixEncodage
+import school.frontend.SchoolOpsManager.loadSchoolFrontend
+import school.frontend.SchoolOpsManager.processSchoolFrontendCnameFile
+import school.frontend.SchoolOpsManager.pushSchoolFrontendPages
+import school.training.content.SPG
+import school.training.content.SchoolContentManager
 import workspace.WorkspaceManager.TASK_PUBLISH_SITE
 import workspace.WorkspaceManager.initWorkspace
 import workspace.WorkspaceManager.initialConf
@@ -10,12 +16,6 @@ import workspace.WorkspaceManager.printConf
 import workspace.WorkspaceUtils
 import workspace.WorkspaceUtils.lsWorkingDir
 import workspace.WorkspaceUtils.yamlMapper
-import school.training.content.SPG
-import school.training.content.SchoolContentManager
-import school.frontend.SchoolOpsManager.fixEncodage
-import school.frontend.SchoolOpsManager.loadSchoolFrontend
-import school.frontend.SchoolOpsManager.processSchoolFrontendCnameFile
-import school.frontend.SchoolOpsManager.pushSchoolFrontendPages
 import java.lang.System.getenv
 import java.nio.charset.StandardCharsets.UTF_8
 
@@ -57,7 +57,7 @@ val c = Pair(0, 0)
 class SchoolPlugin : Plugin<Project> {
     override fun apply(project: Project) {
 
-        project.task("spg") {
+        project.tasks.register("spg") {
             group = "School"
             description = "Show SPG."
             doFirst {
@@ -80,7 +80,8 @@ class SchoolPlugin : Plugin<Project> {
         schoolMoodleTasks
             .map { mapOf(it to GROUP_SCHOOL_MOODLE) }
             .map(WorkspaceUtils::constructTaskName)
-            .map(project::task)
+            .map(project.tasks::register)
+            .map { it.get() }
             .forEach {
                 it.group = GROUP_SCHOOL_MOODLE
                 when {
@@ -107,7 +108,7 @@ class SchoolPlugin : Plugin<Project> {
             }
 
         schoolFrontendTasks.forEach { (taskName, npmTask, manual) ->
-            project.task("$GROUP_SCHOOL_FRONTEND$taskName") {
+            project.tasks.register("$GROUP_SCHOOL_FRONTEND$taskName") {
                 group = GROUP_SCHOOL_FRONTEND
                 description = manual
                 dependsOn(TASK_NPM_INSTALL)
@@ -117,7 +118,7 @@ class SchoolPlugin : Plugin<Project> {
             }
         }
 
-        project.task(TASK_HELLO) {
+        project.tasks.register(TASK_HELLO) {
             group = GROUP_SCHOOL
             description = "Greetings from the School Manager !"
             doLast {
@@ -129,7 +130,7 @@ class SchoolPlugin : Plugin<Project> {
             }
         }
 
-        project.task(TASK_CONF_TO_YAML) {
+        project.tasks.register(TASK_CONF_TO_YAML) {
             group = GROUP_SCHOOL
             description = "Task tool to dev"
             doFirst { println(":$TASK_CONF_TO_YAML") }
@@ -137,7 +138,7 @@ class SchoolPlugin : Plugin<Project> {
         }
 
 
-        project.task(TASK_INITIAL_CONF_TO_YAML) {
+        project.tasks.register(TASK_INITIAL_CONF_TO_YAML) {
             group = GROUP_WORKSPACE_UTILS
             description = "Task tool to dev"
             doFirst { println(":$TASK_INITIAL_CONF_TO_YAML") }
@@ -165,7 +166,7 @@ class SchoolPlugin : Plugin<Project> {
             doLast { println(project.initialConf) }
         }
 
-        project.task(TASK_PRINT_ENV_VARS) {
+        project.tasks.register(TASK_PRINT_ENV_VARS) {
             group = GROUP_WORKSPACE_UTILS
             description = "Retrieve environment variables."
             doFirst {
@@ -176,14 +177,14 @@ class SchoolPlugin : Plugin<Project> {
             }
         }
 
-        project.task(TASK_INIT_WORKSPACE) {
+        project.tasks.register(TASK_INIT_WORKSPACE) {
             group = GROUP_SCHOOL
             description = "Task tool to dev"
             doFirst { println(":$TASK_INIT_WORKSPACE") }
             doLast { project.initWorkspace() }
         }
 
-        project.task(TASK_PRINT_DOSSIER_PROFESSIONNELLE) {
+        project.tasks.register(TASK_PRINT_DOSSIER_PROFESSIONNELLE) {
             group = GROUP_SCHOOL
             description = "Log dossier professionnel structure"
             doLast { project.projectDir.run(SchoolContentManager::printDossierProfessionnelle) }
@@ -194,7 +195,7 @@ class SchoolPlugin : Plugin<Project> {
         //auquel cas, il y a création d'un nouveau workspace.yaml
         // sur la base de celui de initWorkspace
         // publishSite
-        project.task(TASK_PUBLISH_SITE) {
+        project.tasks.register(TASK_PUBLISH_SITE) {
             group = GROUP_SCHOOL_FRONTEND
             description = "Publish school frontend online."
             dependsOn(TASK_NPM_RUN_PREDEPLOY)
@@ -202,21 +203,21 @@ class SchoolPlugin : Plugin<Project> {
             doLast { project.pushSchoolFrontendPages() }
         }
 
-        project.task(TASK_SCHOOL_BACKOFFICE_TESTS) {
+        project.tasks.register(TASK_SCHOOL_BACKOFFICE_TESTS) {
             group = GROUP_SCHOOL
             description = "Test backoffice."
             dependsOn(TASK_NPM_INSTALL)
             doFirst { println(":$TASK_SCHOOL_BACKOFFICE_TESTS") }
         }
 
-        project.task(TASK_SCHOOL_BACKOFFICE_PUSH) {
+        project.tasks.register(TASK_SCHOOL_BACKOFFICE_PUSH) {
             group = GROUP_SCHOOL
             description = "Push backoffice script to google workspace."
             dependsOn(TASK_SCHOOL_BACKOFFICE_TESTS)
             doFirst { println(":$TASK_SCHOOL_BACKOFFICE_PUSH") }
         }
 
-        project.task(TASK_LS_WORKING_DIR) {
+        project.tasks.register(TASK_LS_WORKING_DIR) {
             group = GROUP_WORKSPACE_UTILS
             description = "Run ls command against workingDir."
             doFirst { project.lsWorkingDir() }

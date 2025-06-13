@@ -6,7 +6,7 @@ import org.gradle.api.Project
 class JBakeGhPagesPlugin : Plugin<Project> {
     override fun apply(project: Project) {
 
-        project.task("helloJBakeGhPages") {
+        project.tasks.register("helloJBakeGhPages") {
             doFirst { println("Hello JbakeGhPages") }
 //            tasks.register("jbakeGhPagesTests") {
 //                group = "JbakeGhPages"

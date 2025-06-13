@@ -12,7 +12,7 @@ class FormPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
 
-        project.task("isFormAuthOk") {
+        project.tasks.register("isFormAuthOk") {
             group = "Form"
             description = "Greetings from the Form Manager !"
             doLast {

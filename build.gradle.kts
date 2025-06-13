@@ -22,11 +22,7 @@ import slides.SlidesPlugin.Slide.DEFAULT_SLIDES_FOLDER_PATH
 import slides.SlidesPlugin.Slide.IMAGES
 import workspace.WorkspaceUtils.sep
 
-plugins {
-    idea
-    this.id("org.asciidoctor.jvm.revealjs")
-    this.id("com.github.node-gradle.node")
-}
+plugins { this.id("org.asciidoctor.jvm.revealjs") }
 
 apply<school.frontend.SchoolPlugin>()
 apply<forms.FormPlugin>()

@@ -7,7 +7,10 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.wrapper.Wrapper
 import org.gradle.kotlin.dsl.getByName
+import org.gradle.kotlin.dsl.idea
+import org.gradle.kotlin.dsl.plugins
 import org.gradle.kotlin.dsl.withType
+import org.gradle.plugin.use.PluginDependenciesSpec
 import workspace.WorkspaceManager.privateProps
 import workspace.WorkspaceUtils.purchaseArtifact
 
@@ -21,8 +24,8 @@ class WorkspacePlugin : Plugin<Project> {
     }
 
     override fun apply(project: Project) {
+        project.plugins.apply("idea")
         project.purchaseArtifact()
-
         project.tasks.getByName<Wrapper>("wrapper").gradleVersion = "8.14.2"
 
         project.tasks.withType<JavaExec> {
