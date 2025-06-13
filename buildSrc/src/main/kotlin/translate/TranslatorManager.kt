@@ -13,7 +13,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.Project
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.options.Option
-import org.gradle.kotlin.dsl.task
+import org.gradle.kotlin.dsl.register
 import translate.TranslatorManager.PromptManager.getTranslatePromptMessage
 import workspace.WorkspaceUtils.uppercaseFirstChar
 import java.util.Locale.*
@@ -47,7 +47,7 @@ object TranslatorManager {
 
     @JvmStatic
     fun Set<String>.translationTasks()
-            : Set<Pair<String/*taskName*/, Pair<String/*from*/, String/*to*/>>> =
+            : Set<Pair<String/* taskName */, Pair<String/* from */, String/* to */>>> =
         mutableSetOf<Pair<String, Pair<String, String>>>().apply {
             this@translationTasks
                 .map { it.uppercaseFirstChar }
@@ -74,16 +74,14 @@ object TranslatorManager {
             """Translate this sentence from ${
                 forLanguageTag(first).getDisplayLanguage(ENGLISH).lowercase()
             } to ${
-                forLanguageTag(second).getDisplayLanguage(
-                    ENGLISH
-                ).lowercase()
+                forLanguageTag(second).getDisplayLanguage(ENGLISH).lowercase()
             } :
 $text""".trimMargin()
     }
 
 
     fun Project.createDisplaySupportedLanguagesTask() =
-        task<DefaultTask>("displaySupportedLanguages") {
+        tasks.register<DefaultTask>("displaySupportedLanguages") {
             group = "translator"
             description = "Dislpay supported languages"
             doFirst {
@@ -115,7 +113,7 @@ $text""".trimMargin()
         model: String,
         taskComponent: Pair<String, Pair<String, String>>
     ) {
-        task<InputTranslationTextTask>("translate${taskComponent.first}") {
+        tasks.register<InputTranslationTextTask>("translate${taskComponent.first}") {
             group = "translator"
             description = "Translate using the Ollama $model chatgpt prompt request."
             doLast {
@@ -132,7 +130,7 @@ $text""".trimMargin()
         model: String,
         taskComponent: Pair<String, Pair<String, String>>
     ) {
-        task<InputTranslationTextTask>("translateStream${taskComponent.first}") {
+        tasks.register<InputTranslationTextTask>("translateStream${taskComponent.first}") {
             group = "translator"
             description = "Translate the Ollama $model chatgpt stream prompt request."
             doLast {
@@ -145,7 +143,7 @@ $text""".trimMargin()
     }
 
     fun Project.runTranslationChat(model: String, text: String) =
-        createOllamaChatModel(model = model).run { generate(text).let(::println) }
+        createOllamaChatModel(model = model).run { chat(text).let(::println) }
 
     fun Project.runStreamTranslationChat(model: String, text: String) = runBlocking {
         createOllamaStreamingChatModel(model).run {
