@@ -8,7 +8,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.Exec
-import org.gradle.kotlin.dsl.create
+import org.gradle.kotlin.dsl.maven
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.repositories
 import slides.SlidesManager.CONFIG_PATH_KEY
@@ -46,15 +46,21 @@ class SlidesPlugin : Plugin<Project> {
     }
 
     override fun apply(project: Project) {
-//        project.plugins.apply("org.asciidoctor.jvm.revealjs")
         project.plugins.apply("com.github.node-gradle.node")
-//        project.extensions.create<SlidesConfiguration>("slider", project)
-//        this.id("org.asciidoctor.jvm.revealjs")
+        project.plugins.apply("org.asciidoctor.jvm.revealjs")
+
         project.repositories {
             mavenCentral()
             gradlePluginPortal()
-//            (this as ExtensionAware).the<RepositoryHandlerExtension>().gems()
+            setOf(
+                "https://repo.gradle.org/gradle/libs-releases/",
+                "https://plugins.gradle.org/m2/",
+                "https://maven.xillio.com/artifactory/libs-release/",
+                "https://mvnrepository.com/repos/springio-plugins-release",
+                "https://archiva-repository.apache.org/archiva/repository/public/"
+            ).forEach(::maven)
         }
+
 
         project.tasks.register<AsciidoctorTask>("asciidoctor") {
             group = GROUP_TASK_SLIDER
@@ -211,7 +217,7 @@ class SlidesPlugin : Plugin<Project> {
             workingDir = project.layout.projectDirectory.asFile
         }
 
-        project.tasks.register<NpxTask>("serveSlides") {
+        project.tasks.register<NpxTask>(RevealJsSlides.TASK_SERVE_SLIDES) {
             group = GROUP_TASK_SLIDER
             description = "Serve slides using the serve package executed via npx"
             dependsOn(TASK_ASCIIDOCTOR_REVEALJS)
@@ -234,6 +240,8 @@ class SlidesPlugin : Plugin<Project> {
         const val WORKSPACE_FOLDER = "workspace"
         const val IMAGES = "images"
         const val DEFAULT_SLIDES_FOLDER = "misc"
+
+        //TODO: construct path from config file in yaml format
         val officeDir: String
             get() = "${System.getProperty("user.home")}$sep$WORKSPACE_FOLDER$sep$OFFICE_FOLDER"
         val DEFAULT_SLIDES_FOLDER_PATH = "$officeDir$sep$SLIDES_FOLDER$sep$DEFAULT_SLIDES_FOLDER"
