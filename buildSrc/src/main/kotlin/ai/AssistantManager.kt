@@ -64,6 +64,7 @@ object AssistantManager {
         }.build()
 
 
+    @Suppress("removal")
     suspend fun generateStreamingResponse(
         model: StreamingChatLanguageModel, promptMessage: String
     ): Either<Throwable, Response<AiMessage>> = catch {
@@ -80,7 +81,7 @@ object AssistantManager {
 
     fun Project.runChat(model: String) {
         createOllamaChatModel(model = model)
-            .run { PromptManager.userMessageFr.run(::generate).let(::println) }
+            .run { PromptManager.userMessageFr.run(::chat).let(::println) }
     }
 
     fun Project.runStreamChat(model: String) {
@@ -99,7 +100,7 @@ object AssistantManager {
 
     // Generic function for chat model tasks
     fun Project.createChatTask(model: String, taskName: String) {
-        task(taskName) {
+        tasks.register(taskName) {
             group = "school-ai"
             description = "Display the Ollama $model chatgpt prompt request."
             doFirst { project.runChat(model) }
@@ -108,7 +109,7 @@ object AssistantManager {
 
     // Generic function for streaming chat model tasks
     fun Project.createStreamingChatTask(model: String, taskName: String) {
-        task(taskName) {
+        tasks.register(taskName) {
             group = "school-ai"
             description = "Display the Ollama $model chatgpt stream prompt request."
             doFirst { runStreamChat(model) }
