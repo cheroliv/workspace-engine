@@ -35,9 +35,8 @@ apply<workspace.WorkspacePlugin>()
 apply<school.training.content.TrainingContentPlugin>()
 apply<school.training.courses.CoursesPlugin>()
 
-repositories { ruby { gems() } }
-
 project.tasks.getByName<AsciidoctorJRevealJSTask>(TASK_ASCIIDOCTOR_REVEALJS) {
+    repositories { ruby { gems() } }
     group = GROUP_TASK_SLIDER
     description = "Slider settings"
     dependsOn(TASK_CLEAN_SLIDES_BUILD)
