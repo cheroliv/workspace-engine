@@ -1,15 +1,17 @@
-package school.training.content
+package school.training.teacher
 
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.apache.poi.xwpf.usermodel.XWPFDocument
+import school.training.content.SPD
+import school.training.content.SPG
+import school.training.content.Training
 import workspace.WorkspaceUtils
 import java.io.File
 import java.io.FileInputStream
 
-
-object SchoolContentManager {
+object FPAManager {
 
     val SPG.toYaml: String
         get() = run(YAMLMapper()::writeValueAsString)
@@ -42,7 +44,7 @@ object SchoolContentManager {
     val DOSSIER_PROFESSIONNELLE_PATH by lazy { "${WorkspaceUtils.sep}projects${WorkspaceUtils.sep}school${WorkspaceUtils.sep}rsrc${WorkspaceUtils.sep}docs${WorkspaceUtils.sep}dossier_professionnel_titre.docx" }
     fun printDossierProfessionnelle(projectDir: File) = projectDir.absolutePath
         .plus(DOSSIER_PROFESSIONNELLE_PATH)
-        .apply(SchoolContentManager::printDocxStructure)
+        .apply(FPAManager::printDocxStructure)
         .run(::println)
 
     @Suppress("MemberVisibilityCanBePrivate")

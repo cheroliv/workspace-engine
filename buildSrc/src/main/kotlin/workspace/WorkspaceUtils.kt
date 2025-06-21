@@ -8,15 +8,12 @@ import com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMEST
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import org.gradle.api.Project
-import org.gradle.process.BaseExecSpec
-import workspace.WorkspacePlugin.School
 import workspace.WorkspacePlugin.School.GROUP_KEY
 import workspace.WorkspacePlugin.School.VERSION_KEY
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.OutputStream
 import java.nio.file.FileSystems
-import java.util.*
 
 object WorkspaceUtils {
     @JvmStatic

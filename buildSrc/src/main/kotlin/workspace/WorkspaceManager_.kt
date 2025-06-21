@@ -3,7 +3,7 @@
 //    "MemberVisibilityCanBePrivate"
 //)
 //
-//package school
+package workspace
 //
 //import app.workspace.Workspace.InstallationType.ALL_IN_ONE
 //import app.workspace.Workspace.WorkspaceConfig

@@ -4,7 +4,7 @@ repositories {
     google()
     mavenCentral()
     gradlePluginPortal()
-    setOf(
+    listOf(
         "https://repo.gradle.org/gradle/libs-releases/",
         "https://plugins.gradle.org/m2/",
         "https://maven.xillio.com/artifactory/libs-release/",

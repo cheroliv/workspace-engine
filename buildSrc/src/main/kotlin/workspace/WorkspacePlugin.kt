@@ -7,10 +7,7 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.wrapper.Wrapper
 import org.gradle.kotlin.dsl.getByName
-import org.gradle.kotlin.dsl.idea
-import org.gradle.kotlin.dsl.plugins
 import org.gradle.kotlin.dsl.withType
-import org.gradle.plugin.use.PluginDependenciesSpec
 import workspace.WorkspaceManager.privateProps
 import workspace.WorkspaceUtils.purchaseArtifact
 

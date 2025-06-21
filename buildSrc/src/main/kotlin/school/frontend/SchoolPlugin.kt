@@ -8,7 +8,7 @@ import school.frontend.SchoolOpsManager.loadSchoolFrontend
 import school.frontend.SchoolOpsManager.processSchoolFrontendCnameFile
 import school.frontend.SchoolOpsManager.pushSchoolFrontendPages
 import school.training.content.SPG
-import school.training.content.SchoolContentManager
+import school.training.teacher.FPAManager
 import workspace.WorkspaceManager.TASK_PUBLISH_SITE
 import workspace.WorkspaceManager.initWorkspace
 import workspace.WorkspaceManager.initialConf
@@ -187,7 +187,7 @@ class SchoolPlugin : Plugin<Project> {
         project.tasks.register(TASK_PRINT_DOSSIER_PROFESSIONNELLE) {
             group = GROUP_SCHOOL
             description = "Log dossier professionnel structure"
-            doLast { project.projectDir.run(SchoolContentManager::printDossierProfessionnelle) }
+            doLast { project.projectDir.run(FPAManager::printDossierProfessionnelle) }
         }
 
 

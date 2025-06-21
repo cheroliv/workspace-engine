@@ -35,9 +35,9 @@ import forms.FormPlugin
 import school.frontend.SchoolPlugin
 import school.frontend.SchoolPlugin.Companion.TASK_HELLO
 import jbake.JBakeGhPagesPlugin
-import school.training.content.SchoolContentManager.spgJsonMapper
-import school.training.content.SchoolContentManager.toJson
-import school.training.content.SchoolContentManager.toYaml
+import school.training.teacher.FPAManager.spgJsonMapper
+import school.training.teacher.FPAManager.toJson
+import school.training.teacher.FPAManager.toYaml
 import workspace.OfficeEntry
 import java.io.File
 import java.lang.System.out
