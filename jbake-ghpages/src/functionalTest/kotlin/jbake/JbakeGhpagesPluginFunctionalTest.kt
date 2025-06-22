@@ -1,10 +1,12 @@
+@file:Suppress("FunctionName")
+
 package jbake
 
-import java.io.File
-import kotlin.test.assertTrue
-import kotlin.test.Test
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.jupiter.api.io.TempDir
+import java.io.File
+import kotlin.test.Test
+import kotlin.test.assertTrue
 
 class JbakeGhpagesPluginFunctionalTest {
 
@@ -17,14 +19,10 @@ class JbakeGhpagesPluginFunctionalTest {
     @Test
     fun `can run task`() {
         // Set up the test build
-        settingsFile.writeText("")
-        buildFile.writeText(
-            """
-            plugins {
-                id('jbake.greeting')
-            }
-        """.trimIndent()
-        )
+        "".run(settingsFile::writeText)
+        """plugins { id('jbake.greeting') }"""
+            .run(String::trimIndent)
+            .run(buildFile::writeText)
 
         val runner = GradleRunner.create()
         runner.forwardOutput()
