@@ -14,7 +14,8 @@ class JbakeGhpagesPlugin: Plugin<Project> {
         // Register a task
         project.tasks.register("greeting") { task ->
             task.doLast {
-                println("Hello from plugin 'jbake.greeting'")
+                """Hello from plugin "jbake.greeting"""""
+                    .run(::println)
             }
         }
     }
