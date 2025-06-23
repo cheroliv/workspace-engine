@@ -8,7 +8,7 @@ import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-class JbakeGhpagesPluginFunctionalTest {
+class JbakeGhPagesPluginFunctionalTest {
 
     @field:TempDir
     lateinit var projectDir: File

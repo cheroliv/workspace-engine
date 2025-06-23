@@ -7,7 +7,7 @@ import kotlin.test.assertNotNull
 /**
  * A simple unit test for the 'jbake.greeting' plugin.
  */
-class JbakeGhpagesPluginTest {
+class JbakeGhPagesPluginTest {
     @Test
     fun `plugin registers task`() {
         // Create a test project and apply the plugin
