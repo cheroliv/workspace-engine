@@ -1,10 +1,12 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     `java-gradle-plugin`
     this.alias(libs.plugins.kotlin.jvm)
 }
 
-repositories { mavenCentral() }
-//repositories(RepositoryHandler::mavenCentral)
+repositories(RepositoryHandler::mavenCentral)
 
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
@@ -14,7 +16,7 @@ dependencies {
 gradlePlugin {
     val greeting by plugins.creating {
         id = "jbake.greeting"
-        implementationClass = "jbake.JbakeGhpagesPlugin"
+        implementationClass = "jbake.JbakeGhPagesPlugin"
     }
 }
 
@@ -37,14 +39,12 @@ tasks.named<Task>("check") { dependsOn(functionalTest) }
 
 tasks.named<Test>("test") { useJUnitPlatform() }
 
-//kotlin {
-//    jvmToolchain {
-//        languageVersion.set(JavaLanguageVersion.of(21))
-//    }
-//}
+kotlin.jvmToolchain {
+    JvmTarget.JVM_21.ordinal
+        .run(JavaLanguageVersion::of)
+        .run(languageVersion::set)
+}
 
-//tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-//    kotlinOptions {
-//        jvmTarget = "21"
-//    }
-//}
+tasks.withType<KotlinCompile>().configureEach {
+    JvmTarget.JVM_21.run(compilerOptions.jvmTarget::set)
+}
