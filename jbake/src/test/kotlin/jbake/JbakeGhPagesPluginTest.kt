@@ -15,6 +15,6 @@ class JbakeGhPagesPluginTest {
         project.plugins.apply("jbake.greeting")
 
         // Verify the result
-        assertNotNull(project.tasks.findByName("greeting"))
+        assertNotNull(project.tasks.findByName("jbakeGreeting"))
     }
 }

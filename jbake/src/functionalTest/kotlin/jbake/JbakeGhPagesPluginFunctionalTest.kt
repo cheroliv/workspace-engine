@@ -1,5 +1,3 @@
-@file:Suppress("FunctionName")
-
 package jbake
 
 import org.gradle.testkit.runner.GradleRunner.create
@@ -16,23 +14,27 @@ class JbakeGhPagesPluginFunctionalTest {
     private val buildFile by lazy { projectDir.resolve("build.gradle.kts") }
     private val settingsFile by lazy { projectDir.resolve("settings.gradle.kts") }
 
-    @Test
-    fun `can run task`() {
-        // Set up the test build
+    private fun initBuildScript(settingsFile: File, buildFile: File) {
         "".run(settingsFile::writeText)
         """plugins { id("jbake.greeting") }"""
             .run(String::trimIndent)
             .run(buildFile::writeText)
-
-        val runner = create()
-            .forwardOutput()
-            .withPluginClasspath()
-            .withArguments("greeting")
-            .withProjectDir(projectDir)
-        val result = runner.build().output
-        // Verify the output
-        """Hello from plugin "jbake.greeting""""
-            .run(result::contains)
-            .run(::assertTrue)
     }
+
+    @Test
+    @Suppress("FunctionName")
+    fun `can run task`() {
+        // Set up the test build
+        initBuildScript(settingsFile,buildFile)
+        // Verify the output
+        """Hello from plugin "jbake.greeting"""".run(
+            create()
+                .forwardOutput()
+                .withPluginClasspath()
+                .withArguments("jbakeGreeting")
+                .withProjectDir(projectDir).build().output::contains
+        ).run(::assertTrue)
+    }
+
+
 }

@@ -1,18 +1,18 @@
 package jbake
 
-import org.gradle.api.Project
 import org.gradle.api.Plugin
+import org.gradle.api.Project
 
 /**
- * A simple 'hello world' plugin.
+ * JBake plugin.
  */
-class JbakeGhPagesPlugin: Plugin<Project> {
+@Suppress("unused")
+class JbakeGhPagesPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         // Register a task
-        project.tasks.register("greeting") { task ->
+        project.tasks.register("jbakeGreeting") { task ->
             task.doLast {
-                """Hello from plugin "jbake.greeting"""""
-                    .run(::println)
+                """Hello from plugin "jbake.greeting"""".run(::println)
             }
         }
     }

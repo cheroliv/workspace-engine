@@ -1,6 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     `java-gradle-plugin`
     this.alias(libs.plugins.kotlin.jvm)
@@ -39,12 +36,12 @@ tasks.named<Task>("check") { dependsOn(functionalTest) }
 
 tasks.named<Test>("test") { useJUnitPlatform() }
 
-kotlin.jvmToolchain {
-    JvmTarget.JVM_21.ordinal
-        .run(JavaLanguageVersion::of)
-        .run(languageVersion::set)
-}
-
-tasks.withType<KotlinCompile>().configureEach {
-    JvmTarget.JVM_21.run(compilerOptions.jvmTarget::set)
-}
+//kotlin.jvmToolchain {
+//    org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21.ordinal
+//        .run(JavaLanguageVersion::of)
+//        .run(languageVersion::set)
+//}
+//
+//tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+//    org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21.run(compilerOptions.jvmTarget::set)
+//}
