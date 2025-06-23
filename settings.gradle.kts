@@ -9,6 +9,9 @@ pluginManagement {
         id("com.github.node-gradle.node").version(extra["node-gradle.version"].toString())
     }
 }
+plugins {
+    this.id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+}
 
 @Suppress("UnstableApiUsage")
 dependencyResolutionManagement.repositories.mavenCentral()
