@@ -16,7 +16,7 @@ class JbakeGhPagesPluginFunctionalTest {
 
     private fun initBuildScript(settingsFile: File, buildFile: File) {
         "".run(settingsFile::writeText)
-        """plugins { id("jbake.greeting") }"""
+        """plugins { id("jbake.ghpages") }"""
             .run(String::trimIndent)
             .run(buildFile::writeText)
     }
@@ -27,7 +27,7 @@ class JbakeGhPagesPluginFunctionalTest {
         // Set up the test build
         initBuildScript(settingsFile,buildFile)
         // Verify the output
-        """Hello from plugin "jbake.greeting"""".run(
+        """Hello from plugin "jbake.ghpages"""".run(
             create()
                 .forwardOutput()
                 .withPluginClasspath()

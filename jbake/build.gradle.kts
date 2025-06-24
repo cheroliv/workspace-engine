@@ -11,8 +11,8 @@ dependencies {
 }
 
 gradlePlugin {
-    val greeting by plugins.creating {
-        id = "jbake.greeting"
+    val jbakeGhPages by plugins.creating {
+        id = "jbake.ghpages"
         implementationClass = "jbake.JbakeGhPagesPlugin"
     }
 }
