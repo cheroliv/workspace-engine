@@ -2,7 +2,6 @@ package jbake
 
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.jupiter.api.assertDoesNotThrow
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
@@ -45,14 +44,28 @@ class JbakeGhPagesPluginTest {
             .apply(::assertNotNull)
     }
 
-    @Ignore
     @Test
     fun `check jbakeGreeting task output`() {
-        // Create a test project and apply the plugin
+        // Crée un projet de test et applique le plugin
         val project = ProjectBuilder.builder().build()
         project.plugins.apply("jbake.ghpages")
-        // Verify the result
-        project.tasks.findByName("jbakeGreeting")
-            .run(::assertNotNull)
+        val task = project.tasks.findByName("jbakeGreeting")
+        assertNotNull(task, "jbakeGreeting task should not be null")
+
+        // Capture la sortie standard
+        val outputStream = java.io.ByteArrayOutputStream()
+        val originalOut = System.out
+        System.setOut(java.io.PrintStream(outputStream))
+        try {
+            task.actions.forEach { it.execute(task) }
+        } finally {
+            System.setOut(originalOut)
+        }
+
+        // Vérifie la sortie
+        val expected = "Hello from plugin \"jbake.ghpages\"\n"
+        val actual = outputStream.toString()
+        actual.contains(expected)
+            .run(::assertTrue)
     }
 }
