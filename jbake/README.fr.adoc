@@ -1,0 +1,149 @@
+= Plugin Gradle JBake GitHub Pages
+@CherOliv
+v1.0, 2025-06-24
+:toc:
+:toc-title: Sommaire
+:source-highlighter: highlightjs
+:icons: font
+:imagesdir: ./images
+:summary: Plugin Gradle JBake GitHub.
+:revdate: 2025-06-24
+:icons: font
+:sectnumlevels: 6
+:sectnums:
+:toc-title: Sommaire
+:source-highlighter: highlightjs
+
+image:https://img.shields.io/badge/gradle-plugin-blue.svg[Gradle Plugin]
+image:https://img.shields.io/badge/jbake-static%20site-green.svg[JBake Static Site]
+image:https://img.shields.io/badge/deploy-github%20pages-lightgrey.svg[GitHub Pages]
+
+== Présentation
+
+Ce plugin Gradle permet :
+
+* de générer un site statique avec https://jbake.org[JBake],
+* et de le déployer sur GitHub Pages **en utilisant la bibliothèque JGit** (aucune dépendance à Git CLI).
+
+== Prérequis
+
+* Java 17+
+* Gradle 8+
+* Un dépôt GitHub avec Pages activé sur la branche `gh-pages`
+* Un token GitHub avec droit de push (si authentification HTTPS)
+
+== Installation
+
+[source, kotlin]
+----
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+----
+
+[source, kotlin]
+----
+plugins {
+    id("com.cheroliv.jbake-ghpages") version("1.0.0")
+}
+----
+
+== Utilisation
+
+=== Générer le site avec JBake
+
+[source, bash]
+----
+./gradlew bake
+----
+
+Génère le site statique dans le répertoire `build/jbake`.
+
+=== Déployer le site avec JGit
+
+[source, bash]
+----
+./gradlew deployToGithubPages
+----
+
+Cette tâche exécute les opérations suivantes **via JGit** :
+
+. Initialise un dépôt Git temporaire
+. Commit du contenu généré dans `build/jbake`
+. Push vers la branche `gh-pages` du dépôt distant
+
+=== Pipeline complet
+
+[source, bash]
+----
+./gradlew bake deployToGithubPages
+----
+
+== Configuration
+
+[source, kotlin]
+----
+jbakeSite {
+    contentDir.set(file("src/jbake/content"))
+    assetDir.set(file("src/jbake/assets"))
+    templateDir.set(file("src/jbake/templates"))
+    outputDir.set(file("build/jbake"))
+
+    branch.set("gh-pages")
+    repositoryUri.set("https://github.com/cheroliv/mon-site.git")
+    authorName.set("Cheroliv")
+    authorEmail.set("contact@edtech.com")
+    commitMessage.set("Déploiement automatique du site via JGit")
+}
+----
+
+=== Authentification GitHub
+
+* Pour HTTPS : ajoutez un `token` personnel dans `~/.git-credentials` ou utilisez une variable d’environnement
+* Pour SSH : utilisez une `repositoryUri` au format `git@github.com:...` et assurez-vous que la clé SSH est chargée (`ssh-agent`)
+
+== Diagramme de séquence
+
+[plantuml, "jbake-ghpages-jgit", svg]
+----
+@startuml
+actor Dev
+participant "Gradle Plugin" as Plugin
+participant "JBake"
+participant "JGit"
+participant "GitHub"
+
+Dev -> Plugin : ./gradlew bake deployToGithubPages
+Plugin -> JBake : Génération site statique
+JBake --> Plugin : build/jbake/
+Plugin -> JGit : init + add + commit
+JGit -> GitHub : push -> gh-pages
+@enduml
+----
+
+== Développement & Tests
+
+[source, bash]
+----
+./gradlew bake
+./gradlew deployToGithubPages
+----
+
+[source, bash]
+----
+./gradlew test
+----
+
+== Licence
+
+MIT License — libre de modifier, distribuer et utiliser à des fins commerciales.
+
+== Auteur
+
+_Cheroliv_ +
+
+.Développeur EdTech, Craftsmanship & ingénierie pédagogique +
+GitHub : https://github.com/cheroliv
