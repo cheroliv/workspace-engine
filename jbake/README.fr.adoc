@@ -107,22 +107,25 @@ jbakeSite {
 
 == Diagramme de séquence
 
-[plantuml, "jbake-ghpages-jgit", svg]
-----
-@startuml
-actor Dev
-participant "Gradle Plugin" as Plugin
-participant "JBake"
-participant "JGit"
-participant "GitHub"
+image::{docdir}/images/jbake-ghpages-jgit.svg[jbake-ghpages-jgit]
 
-Dev -> Plugin : ./gradlew bake deployToGithubPages
-Plugin -> JBake : Génération site statique
-JBake --> Plugin : build/jbake/
-Plugin -> JGit : init + add + commit
-JGit -> GitHub : push -> gh-pages
-@enduml
-----
+
+// [plantuml,"jbake-ghpages-jgit", svg]
+// ----
+// @startuml
+// actor Dev
+// participant "Gradle Plugin" as Plugin
+// participant "JBake"
+// participant "JGit"
+// participant "GitHub"
+//
+// Dev -> Plugin : ./gradlew bake deployToGithubPages
+// Plugin -> JBake : Génération site statique
+// JBake --> Plugin : build/jbake/
+// Plugin -> JGit : init + add + commit
+// JGit -> GitHub : push -> gh-pages
+// @enduml
+// ----
 
 == Développement & Tests
 
