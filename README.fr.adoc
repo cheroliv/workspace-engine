@@ -1,6 +1,36 @@
 = School
+:toc:
+:toc-title: Sommaire
+:source-highlighter: highlightjs
+:icons: font
+:imagesdir: ./images
+:summary: Plugin Gradle JBake GitHub.
+:revdate: 2025-06-24
+:icons: font
+:sectnumlevels: 6
+:sectnums:
+:toc-title: Sommaire
+:source-highlighter: highlightjs
 
-image::resources/img/lang-en-blue.svg[link=README.adoc]
+image::{docdir}/resources/img/lang-en-blue.svg[link=README.adoc]
+
+
+[plantuml, "jbake-ghpages-jgit", svg]
+----
+@startuml
+actor Dev
+participant "Gradle Plugin" as Plugin
+participant "JBake"
+participant "JGit"
+participant "GitHub"
+
+Dev -> Plugin : ./gradlew bake deployToGithubPages
+Plugin -> JBake : Génération site statique
+JBake --> Plugin : build/jbake/
+Plugin -> JGit : init + add + commit
+JGit -> GitHub : push -> gh-pages
+@enduml
+----
 
 == But
 Le projet School vise à organiser et structurer mon activité de formateur et développeur.
