@@ -1,5 +1,5 @@
 = School
-:toc:
+:toc: table of contents
 :toc-title:
 :source-highlighter: highlightjs
 :icons: font
