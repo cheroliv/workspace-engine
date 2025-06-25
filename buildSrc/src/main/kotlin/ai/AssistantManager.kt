@@ -34,6 +34,7 @@ object AssistantManager {
             "smollm:135m" to "SmollM",
             "llama3.2:3b-instruct-q8_0 " to "LlamaTiny",
             "smollm:135m-instruct-v0.2-q8_0" to "SmollMInstruct",
+            "gemma3:1b-it-fp16" to "Gemma3Instruct",
         )
 
     // Creating tasks for each model

@@ -19,7 +19,7 @@ import workspace.WorkspaceUtils.uppercaseFirstChar
 import java.util.Locale.*
 
 object TranslatorManager {
-    val MODEL: String = localModels.find { it.second == "LlamaTiny" }
+    val MODEL: String = localModels.find { it.second == "Gemma3Instruct" }
         ?.first ?: ""
 
     @JvmStatic
