@@ -107,7 +107,7 @@ jbakeSite {
 
 == Diagramme de séquence
 
-image::./jbake-ghpages-jgit.svg[jbake-ghpages-jgit, "Diagramme de séquence pour le plugin Gradle JBake GitHub Pages"]
+image::./jbake-ghpages-jgit.svg[]
 // [plantuml,"jbake-ghpages-jgit", svg]
 // ----
 // @startuml
