@@ -13,24 +13,7 @@
 :source-highlighter: highlightjs
 
 
-[plantuml, "jbake-ghpages-jgit", svg]
-----
-@startuml
-actor Dev
-participant "Gradle Plugin" as Plugin
-participant "JBake"
-participant "JGit"
-participant "GitHub"
-
-Dev -> Plugin : ./gradlew bake deployToGithubPages
-Plugin -> JBake : Génération site statique
-JBake --> Plugin : build/jbake/
-Plugin -> JGit : init + add + commit
-JGit -> GitHub : push -> gh-pages
-@enduml
-----
-
-image::resources/img/lang-fr-red.svg[link=README.fr.adoc]
+image::{docdir}/resources/img/lang-fr-red.svg[link=README.fr.adoc]
 
 == Goal
 The School project aims to organize and structure my activity as a trainer and developer.
