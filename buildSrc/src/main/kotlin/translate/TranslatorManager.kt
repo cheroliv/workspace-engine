@@ -115,7 +115,7 @@ $text""".trimMargin()
     ) {
         tasks.register<InputTranslationTextTask>("translate${taskComponent.first}") {
             group = "translator"
-            description = "Translate using the Ollama $model chatgpt prompt request."
+            description = "Translate using the Ollama $model chatgpt prompt request. gradle translate${taskComponent.first} --text=\"Hello world\""
             doLast {
                 project.runTranslationChat(
                     model,
@@ -132,7 +132,7 @@ $text""".trimMargin()
     ) {
         tasks.register<InputTranslationTextTask>("translateStream${taskComponent.first}") {
             group = "translator"
-            description = "Translate the Ollama $model chatgpt stream prompt request."
+            description = "Translate the Ollama $model chatgpt stream prompt request. gradle translateStream${taskComponent.first} --text=\"Hello world\""
             doLast {
                 project.runStreamTranslationChat(
                     model,
