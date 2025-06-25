@@ -107,7 +107,7 @@ jbakeSite {
 
 == Diagramme de séquence
 
-image::./images/jbake-ghpages-jgit.svg[jbake-ghpages-jgit]
+image::./jbake-ghpages-jgit.svg[jbake-ghpages-jgit]
 
 
 // [plantuml,"jbake-ghpages-jgit", svg]
