@@ -1,6 +1,6 @@
 = School
 :toc:
-:toc-title: Sommaire
+:toc-title:
 :source-highlighter: highlightjs
 :icons: font
 :imagesdir: ./images
