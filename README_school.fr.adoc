@@ -1,6 +1,6 @@
 = School
 
-image::images/lang-en-blue.svg[link=README.adoc]
+image::{docdir}/images/lang-en-blue.svg[link=README.adoc]
 
 == But
 Le projet School vise à organiser et structurer mon activité de formateur et développeur.

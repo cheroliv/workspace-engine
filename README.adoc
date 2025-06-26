@@ -13,7 +13,7 @@
 :source-highlighter: highlightjs
 
 
-image::{docdir}/resources/img/lang-fr-red.svg[link=README.fr.adoc]
+image::{docdir}/images/lang-fr-red.svg[link=README.fr.adoc]
 
 == Goal
 The School project aims to organize and structure my activity as a trainer and developer.
