@@ -21,6 +21,7 @@ import slides.SlidesPlugin.RevealJsSlides.TOC_KEY
 import slides.SlidesPlugin.Slide.DEFAULT_SLIDES_FOLDER_PATH
 import slides.SlidesPlugin.Slide.IMAGES
 import workspace.WorkspaceUtils.sep
+import java.io.File.separator
 
 plugins { this.id("org.asciidoctor.jvm.revealjs") }
 
@@ -84,5 +85,34 @@ project.tasks.getByName<AsciidoctorJRevealJSTask>(TASK_ASCIIDOCTOR_REVEALJS) {
             REVEALJS_HISTORY_KEY to "true",
             REVEALJS_SLIDENUMBER_KEY to "true"
         ).let(::attributes)
+    }
+}
+
+
+allprojects {
+    tasks.register<Exec>("reportTests") {
+        group = "verification"
+        description = "Check jbake project then show report in firefox"
+        dependsOn("check")
+        commandLine(
+            "firefox",
+            "--new-tab",
+            "build${separator}reports${separator}tests${separator}test${separator}index.html"
+                .run(layout.projectDirectory.asFile.toPath()::resolve)
+                .toAbsolutePath(),
+        )
+    }
+
+    tasks.register<Exec>("reportFunctionalTests") {
+        group = "verification"
+        description = "Check jbake project then show report in firefox"
+        dependsOn("check")
+        commandLine(
+            "firefox",
+            "--new-tab",
+            "build${separator}reports${separator}tests${separator}functionalTest${separator}index.html"
+                .run(layout.projectDirectory.asFile.toPath()::resolve)
+                .toAbsolutePath(),
+        )
     }
 }

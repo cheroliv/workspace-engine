@@ -1,3 +1,5 @@
+import java.io.File.separator
+
 plugins { `kotlin-dsl` }
 
 repositories {
@@ -99,4 +101,30 @@ tasks.withType<JavaExec> {
         "--enable-native-access=ALL-UNNAMED",
         "--enable-preview"
     ).toList()
+}
+
+tasks.register<Exec>("reportTests") {
+    group = "verification"
+    description = "Check buildSrc project classes then show report in firefox"
+    dependsOn("check")
+    commandLine(
+        "firefox",
+        "--new-tab",
+        "build${separator}reports${separator}tests${separator}test${separator}index.html"
+            .run(layout.projectDirectory.asFile.toPath()::resolve)
+            .toAbsolutePath(),
+    )
+}
+
+tasks.register<Exec>("reportFunctionalTests") {
+    group = "verification"
+    description = "Functionally check buildSrc project classes then show report in firefox"
+    dependsOn("check")
+    commandLine(
+        "firefox",
+        "--new-tab",
+        "build${separator}reports${separator}tests${separator}functionalTest${separator}index.html"
+            .run(layout.projectDirectory.asFile.toPath()::resolve)
+            .toAbsolutePath(),
+    )
 }

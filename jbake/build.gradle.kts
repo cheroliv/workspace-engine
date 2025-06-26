@@ -1,3 +1,5 @@
+import java.io.File.separator
+
 plugins {
     `java-gradle-plugin`
     this.alias(libs.plugins.kotlin.jvm)
