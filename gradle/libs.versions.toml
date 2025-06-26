@@ -22,6 +22,9 @@ spring-dependency-management = "1.0.11.RELEASE"
 deps-versions = "0.52.0"
 testcontainers = "1.20.1"
 commons-lang3 = "3.14.0"
+commons-configuration = "1.10"
+asciidoctorj-diagram= "3.0.1"
+asciidoctorj-diagram-plantuml="1.2025.3"
 
 [libraries]
 assertj-swing = { group = "org.assertj", name = "assertj-swing", version = "3.17.1" }
@@ -35,7 +38,7 @@ google-api-client-jackson2 = { group = "com.google.api-client", name = "google-a
 google-auth-library-oauth2-http = { group = "com.google.auth", name = "google-auth-library-oauth2-http", version = "1.23.0" }
 xz = { group = "org.tukaani", name = "xz", version = "1.9" }
 poi-ooxml = { group = "org.apache.poi", name = "poi-ooxml", version = "5.2.5" }
-asciidoctorj-diagram = { group = "org.asciidoctor", name = "asciidoctorj-diagram", version = "2.3.1" }
+#asciidoctorj-diagram = { group = "org.asciidoctor", name = "asciidoctorj-diagram", version = "2.3.1" }
 okhttp-digest = { group = "io.github.rburgst", name = "okhttp-digest", version = "3.1.1" }
 grolifant = { group = "org.ysb33r.gradle", name = "grolifant", version = "0.12.1" }
 langchain4j-core = { group = "dev.langchain4j", name = "langchain4j", version.ref = "langchain4j" }
@@ -95,6 +98,12 @@ commons-collections4 = { group = "org.apache.commons", name = "commons-collectio
 junit-vintage-engine = { group = "org.junit.vintage", name = "junit-vintage-engine", version = "5.12.0-M1" }
 tomcat-servlet-api = { group = "org.apache.tomcat", name = "tomcat-servlet-api" }
 commons-collections-obsolete = { group = "commons-collections", name = "3.2.1" }
+commons-configuration = { module = "commons-configuration:commons-configuration", version.ref = "commons-configuration" }
+#"org.asciidoctor:asciidoctorj-diagram:3.0.1",
+#"org.asciidoctor:asciidoctorj-diagram-plantuml:1.2025.3",
+asciidoctorj-diagram = { group = "org.asciidoctor", name = "asciidoctorj-diagram", version.ref = "asciidoctorj-diagram" }
+asciidoctorj-diagram-plantuml = { group = "org.asciidoctor", name = "asciidoctorj-diagram-plantuml", version.ref = "asciidoctorj-diagram-plantuml" }
+
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

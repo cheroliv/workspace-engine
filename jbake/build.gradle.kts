@@ -1,5 +1,3 @@
-import java.io.File.separator
-
 plugins {
     `java-gradle-plugin`
     this.alias(libs.plugins.kotlin.jvm)
@@ -8,8 +6,13 @@ plugins {
 repositories(RepositoryHandler::mavenCentral)
 
 dependencies {
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation(libs.kotlin.test.junit5)
+    testRuntimeOnly(libs.junit.platform.launcher)
+    arrayOf(
+        libs.commons.configuration,
+        libs.asciidoctorj.diagram,
+        libs.asciidoctorj.diagram.plantuml,
+    ).map(::implementation)
 }
 
 gradlePlugin {
