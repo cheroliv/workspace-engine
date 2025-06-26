@@ -2,6 +2,8 @@ package jbake
 
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.jupiter.api.assertDoesNotThrow
+import java.io.ByteArrayOutputStream
+import java.io.PrintStream
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
@@ -53,9 +55,9 @@ class JbakeGhPagesPluginTest {
         assertNotNull(task, "jbakeGreeting task should not be null")
 
         // Capture la sortie standard
-        val outputStream = java.io.ByteArrayOutputStream()
+        val outputStream = ByteArrayOutputStream()
         val originalOut = System.out
-        System.setOut(java.io.PrintStream(outputStream))
+        System.setOut(PrintStream(outputStream))
         try {
             task.actions.forEach { it.execute(task) }
         } finally {
