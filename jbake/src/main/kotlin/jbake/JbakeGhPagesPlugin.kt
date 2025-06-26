@@ -15,5 +15,13 @@ class JbakeGhPagesPlugin : Plugin<Project> {
                 """Hello from plugin "jbake.ghpages"""".run(::println)
             }
         }
+//        project.buildscript {
+//            repositories.mavenCentral()
+//            arrayOf(
+//                "commons-configuration:commons-configuration:1.10",
+//                "org.asciidoctor:asciidoctorj-diagram:3.0.1",
+//                "org.asciidoctor:asciidoctorj-diagram-plantuml:1.2025.3",
+//            ).map { dependencies.classpath(it) }
+//        }
     }
 }
